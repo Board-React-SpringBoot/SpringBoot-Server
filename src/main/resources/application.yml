@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: board-server
+  profiles:
+    active: dev
+    group:
+      dev: common, secret
+
+---
+
+# application-common.yml
+spring:
+  config:
+    activate:
+      on-profile: common
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
