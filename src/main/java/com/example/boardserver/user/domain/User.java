@@ -25,7 +25,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, length = 50, unique = true)
@@ -36,6 +36,9 @@ public class User extends BaseEntity {
 
     @Column(length = 150)
     private String profile;
+
+    @Builder.Default
+    private Boolean social = false;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
@@ -49,4 +52,20 @@ public class User extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
+
+    /**
+     * 유저 권한 변경
+     * @param role RoleType
+     */
+    public void changeRole(RoleType role) {
+        this.role = role;
+    }
+
+    /**
+     * 패스워드 암호화
+     * @param encodedPassword String
+     */
+    public void encodedPassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }
