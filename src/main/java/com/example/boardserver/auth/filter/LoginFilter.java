@@ -1,6 +1,8 @@
 package com.example.boardserver.auth.filter;
 
 import com.example.boardserver.auth.dto.AuthRequestDTO;
+import com.example.boardserver.auth.dto.CustomUserDetails;
+import com.example.boardserver.auth.jwt.JWTProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,14 +13,18 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JWTProvider jwtProvider;
 
     @Override
     public Authentication attemptAuthentication (
@@ -45,9 +51,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         email = (email != null) ? email : "";
         password = (password != null) ? password : "";
 
-        System.out.println("email: " + email);
-        System.out.println("password: " + password);
-
         // 로그인 검증 용 DTO 생성
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
 
@@ -62,8 +65,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             FilterChain chain, 
             Authentication authentication
     ) {
-        // TODO : JWT 토큰 발급 구현
-        throw new UnsupportedOperationException("JWT 발급 로직 미구현");
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        String email = userDetails.getUsername();
+        Long userId = userDetails.getUserId();
+        String nickname = userDetails.getNickname();
+
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+        GrantedAuthority grantedAuthority = iterator.next();
+        String role = grantedAuthority.getAuthority();
+
+        String token  = jwtProvider.generateToken(userId, email, role, nickname);
+
+        response.addHeader("Authorization", "Bearer " + token);
     }
 
     @Override
@@ -72,7 +87,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             HttpServletResponse response,
             AuthenticationException failed
     ) {
-        // TODO : 로그인 실패 코드 구현
-        throw new UnsupportedOperationException("로그인 실패 로직 미구현");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

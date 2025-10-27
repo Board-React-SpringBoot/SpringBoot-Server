@@ -1,6 +1,7 @@
 package com.example.boardserver.auth.config;
 
 import com.example.boardserver.auth.filter.LoginFilter;
+import com.example.boardserver.auth.jwt.JWTProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JWTProvider jwtProvider;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -34,7 +36,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration));
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider);
         loginFilter.setFilterProcessesUrl("/api/v1/auth/login");
 
         http
