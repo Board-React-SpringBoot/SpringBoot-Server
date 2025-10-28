@@ -18,7 +18,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 유저 관련 에러
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "유저가 없습니다."),
-    USERNAME_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4002", "이미 존재하는 이름입니다."),
+    EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4002", "이미 존재하는 계정입니다."),
+    NICKNAME_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4003", "이미 존재하는 닉네임입니다."),
 
     // 작성 예시
     TEST_EXCEPTION(HttpStatus.BAD_REQUEST, "TEST4001", "테스트용 에러입니다."),
