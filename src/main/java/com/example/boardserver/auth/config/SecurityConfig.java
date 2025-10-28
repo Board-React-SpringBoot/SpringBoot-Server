@@ -1,5 +1,6 @@
 package com.example.boardserver.auth.config;
 
+import com.example.boardserver.auth.filter.JWTFilter;
 import com.example.boardserver.auth.filter.LoginFilter;
 import com.example.boardserver.auth.jwt.JWTProvider;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())
 
+                .addFilterBefore(new JWTFilter(jwtProvider), LoginFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
