@@ -29,4 +29,9 @@ public class AuthController {
     public ApiResponse<AuthRequestDTO.LoginRequestDTO> login(@RequestBody AuthRequestDTO.LoginRequestDTO request) {
         return ApiResponse.onSuccess(request);
     }
+
+    @PostMapping("/naver")
+    public String naver() {
+        return "http://localhost:8080/api/v1/auth/oauth2/naver";
+    }
 }

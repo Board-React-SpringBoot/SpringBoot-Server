@@ -5,9 +5,11 @@ import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 @Builder
 public record CustomUserDetails(
@@ -16,7 +18,12 @@ public record CustomUserDetails(
         String email,
         String nickname,
         String password
-) implements UserDetails {
+) implements UserDetails, OAuth2User {
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -33,6 +40,12 @@ public record CustomUserDetails(
     @Override
     public String getUsername() {
         return email;
+    }
+
+
+    @Override
+    public String getName() {
+        return nickname;
     }
 
     @Override

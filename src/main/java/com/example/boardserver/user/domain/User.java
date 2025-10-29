@@ -38,11 +38,12 @@ public class User extends BaseEntity {
     private String profile;
 
     @Builder.Default
+    @Column(nullable = false, length = 10, columnDefinition = "VARCHAR(10) DEFAULT 'false'")
     private Boolean social = false;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    @Column(nullable = false, length = 15, columnDefinition = "VARCHAR(15) DEFAULT 'USER'")
+    @Column(nullable = false, length = 10, columnDefinition = "VARCHAR(10) DEFAULT 'USER'")
     private RoleType role = RoleType.USER;
 
     @Builder.Default

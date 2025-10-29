@@ -3,6 +3,7 @@ package com.example.boardserver.auth.config;
 import com.example.boardserver.auth.filter.JWTFilter;
 import com.example.boardserver.auth.filter.LoginFilter;
 import com.example.boardserver.auth.jwt.JWTProvider;
+import com.example.boardserver.auth.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +41,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomUserDetailService customUserDetailService) throws Exception {
 
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider);
         loginFilter.setFilterProcessesUrl("/api/v1/auth/login");
@@ -51,9 +52,14 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login((oauth2) -> oauth2
+                        .authorizationEndpoint(auth -> auth
+                                .baseUri("/api/v1/auth/oauth2"))
+                        .userInfoEndpoint((config) -> config
+                                .userService(customUserDetailService)))
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/v1/auth/login", "/", "/api/v1/auth/join").permitAll()
+                        .requestMatchers("/api/v1/auth/login", "/", "/api/v1/auth/join", "api/v1/auth/naver").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "swagger-ui/index.html").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())

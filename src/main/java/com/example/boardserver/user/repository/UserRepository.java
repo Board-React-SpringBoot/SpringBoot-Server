@@ -9,8 +9,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     /**
      * Email로 유저 정보를 조회하는 메소드
-     * @param email
-     * @return
+     * @param email String
+     * @return User
      */
     Optional<User> findByEmail(String email);
 
