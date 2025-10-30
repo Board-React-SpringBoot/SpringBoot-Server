@@ -2,6 +2,7 @@ package com.example.boardserver.auth.config;
 
 import com.example.boardserver.auth.filter.JWTFilter;
 import com.example.boardserver.auth.filter.LoginFilter;
+import com.example.boardserver.auth.handler.CustomSuccessHandler;
 import com.example.boardserver.auth.jwt.JWTProvider;
 import com.example.boardserver.auth.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTProvider jwtProvider;
+    private final CustomSuccessHandler customSuccessHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -56,7 +58,8 @@ public class SecurityConfig {
                         .authorizationEndpoint(auth -> auth
                                 .baseUri("/api/v1/auth/oauth2"))
                         .userInfoEndpoint((config) -> config
-                                .userService(customUserDetailService)))
+                                .userService(customUserDetailService))
+                        .successHandler(customSuccessHandler))  // JWT 발급 핸들러 추가
 
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/api/v1/auth/login", "/", "/api/v1/auth/join", "/api/v1/auth/google", "api/v1/auth/naver").permitAll()
