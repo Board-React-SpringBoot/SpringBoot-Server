@@ -36,6 +36,12 @@ spring:
               - email
               - nickname
               - profile
+          google:
+            client-name: google
+            authorization-grant-type: authorization_code
+            scope:
+              - email
+              - profile
         provider:
           naver:
             authorization-uri: https://nid.naver.com/oauth2.0/authorize

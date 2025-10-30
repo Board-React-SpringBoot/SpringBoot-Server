@@ -2,6 +2,7 @@ package com.example.boardserver.auth.service;
 
 import com.example.boardserver.auth.converter.JoinConverter;
 import com.example.boardserver.auth.dto.CustomUserDetails;
+import com.example.boardserver.auth.dto.Oauth.GoogleResponse;
 import com.example.boardserver.auth.dto.Oauth.NaverResponse;
 import com.example.boardserver.auth.dto.Oauth.OAuth2Response;
 import com.example.boardserver.common.code.status.ErrorStatus;
@@ -62,6 +63,8 @@ public class CustomUserDetailService extends DefaultOAuth2UserService implements
 
         switch (registrationId) {
             case "naver" -> oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
+
+            case "google" -> oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
 
             default -> throw new OAuth2AuthenticationException("지원하지 않는 소셜 로그인입니다.: " + registrationId);
         }

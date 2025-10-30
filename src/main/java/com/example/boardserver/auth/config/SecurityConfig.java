@@ -59,7 +59,7 @@ public class SecurityConfig {
                                 .userService(customUserDetailService)))
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/v1/auth/login", "/", "/api/v1/auth/join", "api/v1/auth/naver").permitAll()
+                        .requestMatchers("/api/v1/auth/login", "/", "/api/v1/auth/join", "/api/v1/auth/google", "api/v1/auth/naver").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "swagger-ui/index.html").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())

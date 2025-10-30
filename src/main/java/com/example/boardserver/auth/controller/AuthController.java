@@ -34,4 +34,9 @@ public class AuthController {
     public String naver() {
         return "http://localhost:8080/api/v1/auth/oauth2/naver";
     }
+
+    @PostMapping("/google")
+    public String google() {
+        return "http://localhost:8080/api/v1/auth/oauth2/google";
+    }
 }
