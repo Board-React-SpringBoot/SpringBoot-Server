@@ -2,6 +2,7 @@ package com.example.boardserver.auth.filter;
 
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.auth.jwt.JWTProvider;
+import com.example.boardserver.common.code.status.ErrorStatus;
 import com.example.boardserver.user.domain.enums.RoleType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,7 +30,46 @@ public class JWTFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
+        // Token 추출
+        String token = extractToken(request);
+
+        if (token == null) {
+            request.setAttribute("exception", ErrorStatus.JWT_NOT_FOUND.getCode());
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        System.out.println("JWT 토큰이 확인되었습니다 : " + token);
+
+        // Token 만료기한 검증
+        jwtProvider.validateToken(token);
+
+        // 토큰에서 사용자 정보 추출
+        CustomUserDetails loginUser = CustomUserDetails.builder()
+                .userId(jwtProvider.getUserId(token))
+                .role(RoleType.toRoleType(jwtProvider.getRole(token)))
+                .email(jwtProvider.getEmail(token))
+                .nickname(jwtProvider.getNickname(token))
+                .build();
+
+        System.out.println("로그인 유저 : " + loginUser);
+
+        // 세션에 로그인 유저 등록
+        Authentication authToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+
+        filterChain.doFilter(request, response);
+    }
+
+    /**
+     * Request에서 Token을 추출하는 메소드
+     * @param request HttpServletRequest
+     * @return String - JWT Token
+     */
+    protected String extractToken(HttpServletRequest request) {
         String token = null;
+
         // Cookie의 Token 추출
         System.out.println(Arrays.toString(request.getCookies()));
         if (request.getCookies() != null) {
@@ -54,37 +94,6 @@ public class JWTFilter extends OncePerRequestFilter {
             }
         }
 
-        if (token == null) {
-            System.out.println("토큰이 존재하지 않습니다.");
-
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        System.out.println("JWT 토큰이 확인되었습니다.");
-
-        // Token 만료기한 검증
-        if (jwtProvider.isExpired(token)) {
-            System.out.println("JWT 토큰이 만료되었습니다.");
-            
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // 토큰에서 사용자 정보 추출
-        CustomUserDetails loginUser = CustomUserDetails.builder()
-                .userId(jwtProvider.getUserId(token))
-                .role(RoleType.toRoleType(jwtProvider.getRole(token)))
-                .email(jwtProvider.getEmail(token))
-                .nickname(jwtProvider.getNickname(token))
-                .build();
-
-        System.out.println("로그인 유저 : " + loginUser);
-
-        // 세션에 로그인 유저 등록
-        Authentication authToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        filterChain.doFilter(request, response);
+        return token;
     }
 }
