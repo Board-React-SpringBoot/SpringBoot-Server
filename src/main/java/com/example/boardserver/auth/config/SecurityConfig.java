@@ -1,7 +1,11 @@
 package com.example.boardserver.auth.config;
 
+import com.example.boardserver.auth.filter.JWTExceptionFilter;
 import com.example.boardserver.auth.filter.JWTFilter;
 import com.example.boardserver.auth.filter.LoginFilter;
+import com.example.boardserver.auth.handler.CustomAccessDeniedHandler;
+import com.example.boardserver.auth.handler.CustomAuthenticationEntryPoint;
+import com.example.boardserver.auth.handler.CustomFailureHandler;
 import com.example.boardserver.auth.handler.CustomSuccessHandler;
 import com.example.boardserver.auth.jwt.JWTProvider;
 import com.example.boardserver.auth.service.CustomUserDetailService;
@@ -21,6 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -30,7 +35,11 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTProvider jwtProvider;
+    private final JWTExceptionFilter jwtExceptionFilter;
     private final CustomSuccessHandler customSuccessHandler;
+    private final CustomFailureHandler customFailureHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -59,16 +68,23 @@ public class SecurityConfig {
                                 .baseUri("/api/v1/auth/oauth2"))
                         .userInfoEndpoint((config) -> config
                                 .userService(customUserDetailService))
-                        .successHandler(customSuccessHandler))  // JWT 발급 핸들러 추가
+                        .successHandler(customSuccessHandler)
+                        .failureHandler(customFailureHandler))  // JWT 발급 핸들러 추가
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/v1/auth/login", "/", "/api/v1/auth/join", "/api/v1/auth/google", "api/v1/auth/naver").permitAll()
+                        .requestMatchers("/", "/api/v1/auth/login", "/api/v1/auth/join",
+                                "/api/v1/auth/oauth2/google", "/api/v1/auth/oauth2/naver").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "swagger-ui/index.html").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())
 
+                .exceptionHandling(exceptionHandler-> exceptionHandler
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler))
+
                 .addFilterBefore(new JWTFilter(jwtProvider), LoginFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JWTFilter.class)
 
                 .cors((cors) -> cors.configurationSource(corsConfigurationSource()));
 

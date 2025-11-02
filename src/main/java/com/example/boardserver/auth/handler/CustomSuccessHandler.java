@@ -43,6 +43,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtProvider.generateToken(userId, email, role, nickname);
         
         response.addCookie(createCookie(token));
+        // TODO : 나중에 프론트엔드 메인 URL로 변경하기
         response.sendRedirect("http://localhost:8080/");
     }
     
