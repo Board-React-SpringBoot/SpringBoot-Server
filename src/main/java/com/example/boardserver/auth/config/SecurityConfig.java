@@ -1,8 +1,14 @@
 package com.example.boardserver.auth.config;
 
+import com.example.boardserver.auth.filter.JWTExceptionFilter;
 import com.example.boardserver.auth.filter.JWTFilter;
 import com.example.boardserver.auth.filter.LoginFilter;
+import com.example.boardserver.auth.handler.CustomAccessDeniedHandler;
+import com.example.boardserver.auth.handler.CustomAuthenticationEntryPoint;
+import com.example.boardserver.auth.handler.CustomFailureHandler;
+import com.example.boardserver.auth.handler.CustomSuccessHandler;
 import com.example.boardserver.auth.jwt.JWTProvider;
+import com.example.boardserver.auth.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -28,6 +35,19 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTProvider jwtProvider;
+    private final JWTExceptionFilter jwtExceptionFilter;
+    private final CustomSuccessHandler customSuccessHandler;
+    private final CustomFailureHandler customFailureHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    private static final String[] PERMIT_URLS = {
+            "/", "/test/post",
+            "/api/v1/auth/login", "/api/v1/auth/join",
+            "/api/v1/auth/oauth2/google", "/api/v1/auth/google",
+            "/api/v1/auth/oauth2/naver", "/api/v1/auth/naver",
+            "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"
+    };
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -40,7 +60,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomUserDetailService customUserDetailService) throws Exception {
 
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider);
         loginFilter.setFilterProcessesUrl("/api/v1/auth/login");
@@ -49,17 +69,26 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/v1/auth/login", "/", "/api/v1/auth/join").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "swagger-ui/index.html").permitAll()
+                        .requestMatchers(PERMIT_URLS).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
+
+                .oauth2Login((oauth2) -> oauth2
+                        .authorizationEndpoint(auth -> auth.baseUri("/api/v1/auth/oauth2"))
+                        .userInfoEndpoint((config) -> config.userService(customUserDetailService))
+                        .successHandler(customSuccessHandler)
+                        .failureHandler(customFailureHandler))  // JWT 발급 핸들러 추가
+
+                .exceptionHandling(exceptionHandler-> exceptionHandler
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler))
 
                 .addFilterBefore(new JWTFilter(jwtProvider), LoginFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JWTFilter.class)
 
                 .cors((cors) -> cors.configurationSource(corsConfigurationSource()));
 
@@ -70,12 +99,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
         configuration.setAllowedMethods(Collections.singletonList("*"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         configuration.setMaxAge(3600L);
-        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

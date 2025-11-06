@@ -1,6 +1,6 @@
 package com.example.boardserver.auth.jwt;
 
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -67,13 +67,22 @@ public class JWTProvider {
     }
 
     /**
-     * JWT 토큰이 만료되었는지 검증하는 메소드
+     * JWT 토큰이 유효한지 검증하는 메소드
      * @param token String
-     * @return Boolean
+     * @throws MalformedJwtException Exp에 대한 정보가 JWT에 존재하지 않을 때
+     * @throws ExpiredJwtException JWT 토큰이 만료되었을 때
      */
-    public Boolean isExpired(String token) {
-        return Jwts.parser().verifyWith(secretKey).build()
-                .parseSignedClaims(token).getPayload().getExpiration().before(new Date()); // 만료기한이 과거인지 검증
+    public void validateToken(String token) {
+        Jws<Claims> jwt = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+        Date expiration = jwt.getPayload().getExpiration();
+
+        if (expiration == null) {
+            throw new MalformedJwtException("Missing Exp Claim");
+        }
+
+        if (expiration.before(new Date())) {
+            throw new ExpiredJwtException(null, jwt.getPayload(), "JWT token has expired");
+        }
     }
 
     /**

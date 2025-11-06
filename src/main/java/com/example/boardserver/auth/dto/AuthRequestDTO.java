@@ -10,6 +10,5 @@ public record AuthRequestDTO() {
     public record LoginRequestDTO(
             String email,
             String password
-    ) {
-    }
+    ) {}
 }
