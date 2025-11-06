@@ -41,6 +41,14 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    private static final String[] PERMIT_URLS = {
+            "/", "/test/post",
+            "/api/v1/auth/login", "/api/v1/auth/join",
+            "/api/v1/auth/oauth2/google", "/api/v1/auth/google",
+            "/api/v1/auth/oauth2/naver", "/api/v1/auth/naver",
+            "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"
+    };
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -61,22 +69,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2Login((oauth2) -> oauth2
-                        .authorizationEndpoint(auth -> auth
-                                .baseUri("/api/v1/auth/oauth2"))
-                        .userInfoEndpoint((config) -> config
-                                .userService(customUserDetailService))
-                        .successHandler(customSuccessHandler)
-                        .failureHandler(customFailureHandler))  // JWT 발급 핸들러 추가
+                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/api/v1/auth/login", "/api/v1/auth/join",
-                                "/api/v1/auth/oauth2/google", "/api/v1/auth/oauth2/naver").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "swagger-ui/index.html").permitAll()
+                        .requestMatchers(PERMIT_URLS).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
+
+                .oauth2Login((oauth2) -> oauth2
+                        .authorizationEndpoint(auth -> auth.baseUri("/api/v1/auth/oauth2"))
+                        .userInfoEndpoint((config) -> config.userService(customUserDetailService))
+                        .successHandler(customSuccessHandler)
+                        .failureHandler(customFailureHandler))  // JWT 발급 핸들러 추가
 
                 .exceptionHandling(exceptionHandler-> exceptionHandler
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
