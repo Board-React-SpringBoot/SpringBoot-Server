@@ -43,10 +43,11 @@ public class SecurityConfig {
 
     private static final String[] PERMIT_URLS = {
             "/", "/test/post",
+            "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html",
             "/api/v1/auth/login", "/api/v1/auth/join",
             "/api/v1/auth/oauth2/google", "/api/v1/auth/google",
             "/api/v1/auth/oauth2/naver", "/api/v1/auth/naver",
-            "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"
+            "/api/v1/auth/reissue"
     };
 
     @Bean
