@@ -7,6 +7,7 @@ import com.example.boardserver.auth.service.AuthCommandService;
 import com.example.boardserver.auth.service.JWTService;
 import com.example.boardserver.common.ApiResponse;
 import com.example.boardserver.common.code.status.ErrorStatus;
+import com.example.boardserver.common.util.DeviceUtils;
 import com.example.boardserver.exception.handler.AuthHandler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -56,9 +57,16 @@ public class AuthController {
                 .map(Cookie::getValue)
                 .findFirst()
                 .orElseThrow(() -> new AuthHandler(ErrorStatus.REFRESH_NOT_FOUND));
+
+        String deviceType = DeviceUtils.getDeviceType(request);
+        if (!jwtService.existsRefreshToken(refresh, deviceType)) {
+            throw new AuthHandler(ErrorStatus.REFRESH_NOT_FOUND);
+        }
         
         String newAccess = jwtService.reissueAccessToken(refresh);
         String newRefresh = jwtService.rotateRefreshToken(refresh);
+
+        jwtService.saveRefreshToken(newRefresh, deviceType);
         
         response.setHeader("Authorization", "Bearer " + newAccess);
         response.addCookie(createCookie(newRefresh));

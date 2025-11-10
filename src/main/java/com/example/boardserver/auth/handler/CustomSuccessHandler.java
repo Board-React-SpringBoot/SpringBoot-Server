@@ -3,6 +3,8 @@ package com.example.boardserver.auth.handler;
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.auth.jwt.JWTProvider;
 import com.example.boardserver.auth.jwt.enums.TokenType;
+import com.example.boardserver.auth.service.JWTService;
+import com.example.boardserver.common.util.DeviceUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import java.util.Iterator;
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTProvider jwtProvider;
+    private final JWTService jwtService;
 
     @Override
     public void onAuthenticationSuccess(
@@ -41,6 +44,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String role = authority.getAuthority();
         
         String token = jwtProvider.generateToken(userId, email, role, nickname, TokenType.Refresh);
+
+        String deviceType = DeviceUtils.getDeviceType(request);
+        jwtService.saveRefreshToken(token, deviceType);
         
         response.addCookie(createCookie(token));
         // TODO : 나중에 프론트엔드 메인 URL로 변경하기

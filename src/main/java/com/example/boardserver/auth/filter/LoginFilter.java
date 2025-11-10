@@ -4,6 +4,8 @@ import com.example.boardserver.auth.dto.AuthRequestDTO;
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.auth.jwt.JWTProvider;
 import com.example.boardserver.auth.jwt.enums.TokenType;
+import com.example.boardserver.auth.service.JWTService;
+import com.example.boardserver.common.util.DeviceUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
@@ -27,6 +29,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTProvider jwtProvider;
+    private final JWTService jwtService;
 
     @Override
     public Authentication attemptAuthentication (
@@ -80,6 +83,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String access  = jwtProvider.generateToken(userId, email, role, nickname, TokenType.Access);
         String refresh = jwtProvider.generateToken(userId, email, role, nickname, TokenType.Refresh);
+
+        String deviceType = DeviceUtils.getDeviceType(request);
+        jwtService.saveRefreshToken(refresh, deviceType);
 
         response.addCookie(createCookie(refresh));
         response.addHeader("Authorization", "Bearer " + access);
