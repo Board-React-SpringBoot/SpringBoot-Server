@@ -38,4 +38,24 @@ public class JWTServiceImpl implements JWTService {
         // 새로운 Access 토큰 발급
         return jwtProvider.generateToken(userId, email, role, nickname, TokenType.Access);
     }
+
+    @Override
+    public String rotateRefreshToken(String refresh) {
+        if (!"Refresh".equals(jwtProvider.getCategory(refresh))) {
+            throw new AuthHandler(ErrorStatus.REFRESH_NOT_FOUND);
+        }
+
+        try {
+            jwtProvider.validateToken(refresh);
+        } catch (ExpiredJwtException e) {
+            throw new AuthHandler(ErrorStatus.JWT_EXPIRED);
+        }
+
+        Long userId = jwtProvider.getUserId(refresh);
+        String email = jwtProvider.getEmail(refresh);
+        String role = jwtProvider.getRole(refresh);
+        String nickname = jwtProvider.getNickname(refresh);
+
+        return jwtProvider.generateToken(userId, email, role, nickname, TokenType.Refresh);
+    }
 }

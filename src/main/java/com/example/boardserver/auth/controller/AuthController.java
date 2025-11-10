@@ -58,8 +58,20 @@ public class AuthController {
                 .orElseThrow(() -> new AuthHandler(ErrorStatus.REFRESH_NOT_FOUND));
         
         String newAccess = jwtService.reissueAccessToken(refresh);
+        String newRefresh = jwtService.rotateRefreshToken(refresh);
         
         response.setHeader("Authorization", "Bearer " + newAccess);
+        response.addCookie(createCookie(newRefresh));
         return ApiResponse.onSuccess("새로운 Access 토큰 발급");
+    }
+
+    private Cookie createCookie(String value) {
+       Cookie cookie = new Cookie("Refresh", value);
+       cookie.setMaxAge(24 * 60 * 60);
+       cookie.setPath("/");
+       cookie.setHttpOnly(true);
+       // cookie.setSecure(true);
+
+        return cookie;
     }
 }

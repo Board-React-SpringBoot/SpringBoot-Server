@@ -8,4 +8,11 @@ public interface JWTService {
      * @return String
      */
     String reissueAccessToken(String refresh);
+
+    /**
+     * Refresh 토큰을 새로 발급하는 서비스 메소드
+     * @param refresh String
+     * @return String
+     */
+    String rotateRefreshToken(String refresh);
 }
