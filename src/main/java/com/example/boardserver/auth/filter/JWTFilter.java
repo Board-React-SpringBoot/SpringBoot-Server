@@ -31,26 +31,25 @@ public class JWTFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         // Token 추출
-        String token = extractToken(request);
-
-        if (token == null) {
+        String accessToken = request.getHeader("Authorization");
+        if (accessToken == null || !accessToken.startsWith("Bearer ")) {
             request.setAttribute("exception", ErrorStatus.JWT_NOT_FOUND.getCode());
-
             filterChain.doFilter(request, response);
             return;
         }
 
-        System.out.println("JWT 토큰이 확인되었습니다 : " + token);
+        accessToken = accessToken.substring("Bearer ".length());
+        System.out.println("JWT 토큰이 확인되었습니다 : " + accessToken);
 
         // Token 만료기한 검증
-        jwtProvider.validateToken(token);
+        jwtProvider.validateToken(accessToken);
 
         // 토큰에서 사용자 정보 추출
         CustomUserDetails loginUser = CustomUserDetails.builder()
-                .userId(jwtProvider.getUserId(token))
-                .role(RoleType.toRoleType(jwtProvider.getRole(token)))
-                .email(jwtProvider.getEmail(token))
-                .nickname(jwtProvider.getNickname(token))
+                .userId(jwtProvider.getUserId(accessToken))
+                .role(RoleType.toRoleType(jwtProvider.getRole(accessToken)))
+                .email(jwtProvider.getEmail(accessToken))
+                .nickname(jwtProvider.getNickname(accessToken))
                 .build();
 
         System.out.println("로그인 유저 : " + loginUser);
@@ -60,40 +59,5 @@ public class JWTFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
-    }
-
-    /**
-     * Request에서 Token을 추출하는 메소드
-     * @param request HttpServletRequest
-     * @return String - JWT Token
-     */
-    protected String extractToken(HttpServletRequest request) {
-        String token = null;
-
-        // Cookie의 Token 추출
-        System.out.println(Arrays.toString(request.getCookies()));
-        if (request.getCookies() != null) {
-            System.out.println("Cookie에서 토큰 추출 중");
-            for (Cookie cookie : request.getCookies()) {
-                System.out.println(cookie.getName());
-
-                if ("Authorization".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        // Authorization 헤더 검증
-        if (token == null) {
-            System.out.println("헤더에서 토큰 추출 중");
-            String header = request.getHeader("Authorization");
-
-            if (header != null && header.startsWith("Bearer ")) {
-                token = header.replace("Bearer ", "");
-            }
-        }
-
-        return token;
     }
 }

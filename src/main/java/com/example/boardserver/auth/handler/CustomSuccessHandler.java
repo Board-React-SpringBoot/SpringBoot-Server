@@ -2,7 +2,9 @@ package com.example.boardserver.auth.handler;
 
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.auth.jwt.JWTProvider;
-import com.example.boardserver.user.domain.enums.RoleType;
+import com.example.boardserver.auth.jwt.enums.TokenType;
+import com.example.boardserver.auth.service.JWTService;
+import com.example.boardserver.common.util.DeviceUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import java.util.Iterator;
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTProvider jwtProvider;
+    private final JWTService jwtService;
 
     @Override
     public void onAuthenticationSuccess(
@@ -40,7 +43,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         GrantedAuthority authority = iterator.next();
         String role = authority.getAuthority();
         
-        String token = jwtProvider.generateToken(userId, email, role, nickname);
+        String token = jwtProvider.generateToken(userId, email, role, nickname, TokenType.Refresh);
+
+        String deviceType = DeviceUtils.getDeviceType(request);
+        jwtService.saveRefreshToken(token, deviceType);
         
         response.addCookie(createCookie(token));
         // TODO : 나중에 프론트엔드 메인 URL로 변경하기
@@ -48,8 +54,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
     
     private Cookie createCookie(String value) {
-        Cookie cookie = new Cookie("Authorization", value);
-        cookie.setMaxAge(60 * 60 * 60);
+        Cookie cookie = new Cookie("Refresh", value);
+        cookie.setMaxAge(24 * 60 * 60);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         // cookie.setSecure(true);  // HTTPS 에서만 사용가능

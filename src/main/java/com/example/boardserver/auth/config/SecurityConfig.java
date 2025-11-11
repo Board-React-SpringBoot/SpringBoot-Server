@@ -9,6 +9,7 @@ import com.example.boardserver.auth.handler.CustomFailureHandler;
 import com.example.boardserver.auth.handler.CustomSuccessHandler;
 import com.example.boardserver.auth.jwt.JWTProvider;
 import com.example.boardserver.auth.service.CustomUserDetailService;
+import com.example.boardserver.auth.service.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,13 +41,15 @@ public class SecurityConfig {
     private final CustomFailureHandler customFailureHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final JWTService jwtService;
 
     private static final String[] PERMIT_URLS = {
             "/", "/test/post",
+            "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html",
             "/api/v1/auth/login", "/api/v1/auth/join",
             "/api/v1/auth/oauth2/google", "/api/v1/auth/google",
             "/api/v1/auth/oauth2/naver", "/api/v1/auth/naver",
-            "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"
+            "/api/v1/auth/reissue"
     };
 
     @Bean
@@ -62,7 +65,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomUserDetailService customUserDetailService) throws Exception {
 
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider, jwtService);
         loginFilter.setFilterProcessesUrl("/api/v1/auth/login");
 
         http

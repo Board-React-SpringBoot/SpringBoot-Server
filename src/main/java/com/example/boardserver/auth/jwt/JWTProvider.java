@@ -1,5 +1,6 @@
 package com.example.boardserver.auth.jwt;
 
+import com.example.boardserver.auth.jwt.enums.TokenType;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,8 @@ public class JWTProvider {
     
     private final SecretKey secretKey;
     
-    public static final long TOKEN_VALID_TIME = 60 * 60 * 1000L;    // 수명 - 1시간
+    public static final long ACCESS_TOKEN = 10 * 60 * 1000L;        // 수명 - 10분
+    public static final long REFRESH_TOKEN = 24 * 60 * 60 * 1000L;  // 수명 - 24시간
 
     public JWTProvider(
             @Value("${jwt.secret}")
@@ -24,6 +26,16 @@ public class JWTProvider {
                 secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm()
         );
+    }
+
+    /**
+     * JWT 토큰의 종류를 추출하는 메소드
+     * @param token String
+     * @return String
+     */
+    public String getCategory(String token) {
+        return Jwts.parser().verifyWith(secretKey).build()
+                .parseSignedClaims(token).getPayload().get("category", String.class);
     }
 
     /**
@@ -91,16 +103,18 @@ public class JWTProvider {
      * @param email String
      * @param role String
      * @param nickname String
+     * @param tokenType TokenType
      * @return String
      */
-    public String generateToken(Long userId, String email, String role, String nickname) {
+    public String generateToken(Long userId, String email, String role, String nickname, TokenType tokenType) {
         return Jwts.builder()
+                .claim("category", tokenType.name())
                 .claim("userId", userId)
                 .claim("email", email)
                 .claim("role", role)
                 .claim("nickname", nickname)
                 .issuedAt(new Date(System.currentTimeMillis()))  // 발행시간
-                .expiration(new Date(System.currentTimeMillis() + TOKEN_VALID_TIME))  // 소멸 시간
+                .expiration(new Date(System.currentTimeMillis() + (tokenType.equals(TokenType.Access) ? ACCESS_TOKEN : REFRESH_TOKEN)))  // 소멸 시간
                 .signWith(secretKey)  // 암호화
                 .compact();
     }

@@ -3,8 +3,12 @@ package com.example.boardserver.auth.filter;
 import com.example.boardserver.auth.dto.AuthRequestDTO;
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.auth.jwt.JWTProvider;
+import com.example.boardserver.auth.jwt.enums.TokenType;
+import com.example.boardserver.auth.service.JWTService;
+import com.example.boardserver.common.util.DeviceUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTProvider jwtProvider;
+    private final JWTService jwtService;
 
     @Override
     public Authentication attemptAuthentication (
@@ -76,9 +81,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority grantedAuthority = iterator.next();
         String role = grantedAuthority.getAuthority();
 
-        String token  = jwtProvider.generateToken(userId, email, role, nickname);
+        String access  = jwtProvider.generateToken(userId, email, role, nickname, TokenType.Access);
+        String refresh = jwtProvider.generateToken(userId, email, role, nickname, TokenType.Refresh);
 
-        response.addHeader("Authorization", "Bearer " + token);
+        String deviceType = DeviceUtils.getDeviceType(request);
+        jwtService.saveRefreshToken(refresh, deviceType);
+
+        response.addCookie(createCookie(refresh));
+        response.addHeader("Authorization", "Bearer " + access);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override
@@ -88,5 +99,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             AuthenticationException failed
     ) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+
+    private Cookie createCookie(String value) {
+        Cookie cookie = new Cookie("Refresh", value);
+        cookie.setMaxAge(24 * 60 * 60); // Cookie 기한을 24시간으로 설정
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        // cookie.setSecure(true);  // HTTPS 에서만 사용가능
+
+        return cookie;
     }
 }
