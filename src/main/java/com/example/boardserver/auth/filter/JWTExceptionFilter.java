@@ -2,6 +2,7 @@ package com.example.boardserver.auth.filter;
 
 import com.example.boardserver.common.ApiResponse;
 import com.example.boardserver.common.code.status.ErrorStatus;
+import com.example.boardserver.exception.handler.AuthHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -44,8 +45,11 @@ public class JWTExceptionFilter extends OncePerRequestFilter {
             log.info("JWT 토큰의 서명이 잘못되었습니다.");
             responseError(response, ErrorStatus.JWT_SIGNATURE_FAILED);
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 존재하지 않습니다.");
+            log.info(e.getMessage());
             responseError(response, ErrorStatus.JWT_NOT_FOUND);
+        } catch (AuthHandler e) {
+            log.info(e.getErrorReason().message());
+            responseError(response, (ErrorStatus) e.getCode());
         }
     }
 
