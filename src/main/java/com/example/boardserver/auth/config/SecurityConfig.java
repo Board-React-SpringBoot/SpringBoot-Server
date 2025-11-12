@@ -1,5 +1,6 @@
 package com.example.boardserver.auth.config;
 
+import com.example.boardserver.auth.filter.CustomLogoutFilter;
 import com.example.boardserver.auth.filter.JWTExceptionFilter;
 import com.example.boardserver.auth.filter.JWTFilter;
 import com.example.boardserver.auth.filter.LoginFilter;
@@ -92,6 +93,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JWTFilter(jwtProvider), LoginFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter, JWTFilter.class)
+                .addFilterBefore(new CustomLogoutFilter(jwtProvider, jwtService), LoginFilter.class)
 
                 .cors((cors) -> cors.configurationSource(corsConfigurationSource()));
 
