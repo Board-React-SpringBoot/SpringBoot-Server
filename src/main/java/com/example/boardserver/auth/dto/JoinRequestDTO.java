@@ -11,7 +11,7 @@ public record JoinRequestDTO (
         String nickname,
         @NotBlank @Email
         String email,
-        @NotBlank @Size(min=2)
+        @NotBlank @Size(min = 2, max = 16)
         String password,
         String profile
 ) {
