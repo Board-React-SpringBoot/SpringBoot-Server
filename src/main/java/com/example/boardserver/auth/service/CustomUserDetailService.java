@@ -39,7 +39,7 @@ public class CustomUserDetailService extends DefaultOAuth2UserService implements
 
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
-                        ErrorStatus.MEMBER_NOT_FOUND.getMessage()
+                        ErrorStatus.USER_NOT_FOUND.getMessage()
                 ));
 
         return CustomUserDetails.builder()
