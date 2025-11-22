@@ -27,4 +27,11 @@ public interface UserRepository extends JpaRepository<User,Long> {
      * @return Boolean
      */
     Boolean existsByNickname(String nickname);
+
+    /**
+     * UserId로 유저 정보를 조회하는 메소드
+     * @param userId
+     * @return
+     */
+    Optional<User> findByUserId(Long userId);
 }
