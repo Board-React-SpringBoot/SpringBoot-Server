@@ -2,6 +2,8 @@ package com.example.boardserver.board.dto;
 
 import lombok.Builder;
 
+import java.util.List;
+
 /**
  * 게시물 작성 Request DTO
  * @param title String
@@ -14,6 +16,6 @@ public record BoardRequestDTO(
         String title,
         String content,
         String boardMainImg,
-        String[] boardImageList
+        List<String> boardImageList
 ) {
 }

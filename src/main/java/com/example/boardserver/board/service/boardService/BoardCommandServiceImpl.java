@@ -27,11 +27,6 @@ public class BoardCommandServiceImpl implements BoardCommandService {
     @Override
     public Board saveBoard(BoardRequestDTO request, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
-/*        Board newBoard = boardRepository.save(BoardConverter.toBoardEntity(request, user));
-
-        List<BoardImg> boardImgList = BoardConverter.toBoardImgEntityList(request, newBoard);
-        boardImgRepository.saveAll(boardImgList);
-        newBoard.getBoardImgList().addAll(boardImgList);*/
 
         return boardRepository.save(BoardConverter.toBoardEntity(request, user));
     }

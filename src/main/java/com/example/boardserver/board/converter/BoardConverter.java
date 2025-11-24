@@ -7,7 +7,6 @@ import com.example.boardserver.board.dto.BoardResponseDTO;
 import com.example.boardserver.user.domain.User;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class BoardConverter {
@@ -27,7 +26,8 @@ public class BoardConverter {
                 .build();
 
         if (request.boardImageList() != null) {
-            List<BoardImg> boardImgList = Arrays.stream(request.boardImageList())
+            List<BoardImg> boardImgList = request.boardImageList()
+                    .stream()
                     .map(img -> BoardImg.builder()
                             .board(board)
                             .img(img)
@@ -38,23 +38,6 @@ public class BoardConverter {
         };
 
         return board;
-    }
-
-    /**
-     * BoardRequestDTO를 기반으로 BoardImg  Entity 리스트 생성
-     * @param request BoardRequestDTO
-     * @param board Board
-     * @return List<BoardImg>
-     */
-    public static List<BoardImg> toBoardImgEntityList(BoardRequestDTO request, Board board) {
-        if (request.boardImageList() == null) return Collections.emptyList();
-
-        return Arrays.stream(request.boardImageList())
-                .map(img -> BoardImg.builder()
-                        .board(board)
-                        .img(img)
-                        .build())
-                .toList();
     }
 
     /**
@@ -69,9 +52,11 @@ public class BoardConverter {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .mainImg(board.getMainImg())
-                .boardImageList(board.getBoardImgList().stream()
-                        .map(BoardImg::getImg)
-                        .toArray(String[]::new))
+                .boardImageList(List.of(
+                        board.getBoardImgList().stream()
+                                .map(BoardImg::getImg)
+                                .toArray(String[]::new)
+                ))
                 .likeCount(board.getLikeCount())
                 .commentCount(board.getCommentCount())
                 .viewCount(board.getViewCount())

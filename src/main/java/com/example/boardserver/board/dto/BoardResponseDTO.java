@@ -3,6 +3,7 @@ package com.example.boardserver.board.dto;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 게시물 작성 후 결과 Response DTO
@@ -25,7 +26,7 @@ public record BoardResponseDTO(
         String title,
         String content,
         String mainImg,
-        String[] boardImageList,
+        List<String> boardImageList,
         Integer likeCount,
         Integer commentCount,
         Integer viewCount,
