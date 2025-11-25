@@ -54,4 +54,24 @@ public class Board extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
+
+    public void inCreaseViewCount() {
+        this.viewCount = this.viewCount + 1;
+    }
+
+    public void inCreaseLikeCount() {
+        this.likeCount = this.likeCount + 1;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount = this.likeCount - 1;
+    }
+
+    public void inCreaseCommentCount() {
+        this.commentCount = this.commentCount + 1;
+    }
+
+    public void decreaseCommentCount() {
+        this.commentCount = this.commentCount - 1;
+    }
 }
