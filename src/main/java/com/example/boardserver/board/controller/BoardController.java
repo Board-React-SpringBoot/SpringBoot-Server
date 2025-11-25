@@ -7,6 +7,7 @@ import com.example.boardserver.board.dto.BoardRequestDTO;
 import com.example.boardserver.board.dto.BoardResponseDTO;
 import com.example.boardserver.board.dto.BoardResponseDetailDTO;
 import com.example.boardserver.board.service.boardLikeService.BoardLikeCommandService;
+import com.example.boardserver.board.service.boardLikeService.BoardLikeQueryService;
 import com.example.boardserver.board.service.boardService.BoardCommandService;
 import com.example.boardserver.board.service.boardService.BoardQueryService;
 import com.example.boardserver.common.ApiResponse;
@@ -24,6 +25,7 @@ public class BoardController {
 
     private final BoardCommandService boardCommandService;
     private final BoardQueryService boardQueryService;
+    private final BoardLikeQueryService boardLikeQueryService;
     private final BoardLikeCommandService boardLikeCommandService;
 
     @PostMapping("")
@@ -43,6 +45,14 @@ public class BoardController {
             @PathVariable("boardId") Long boardId
     ) {
         return ApiResponse.onSuccess(boardQueryService.getBoardDetail(boardId));
+    }
+
+    @GetMapping("/{boardId}/like")
+    public ApiResponse<Boolean> getBoardLike(
+            @PathVariable("boardId") Long boardId,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return ApiResponse.onSuccess(boardLikeQueryService.findBoardLike(user.userId(), boardId));
     }
 
     @PutMapping("/{boardId}/like")
