@@ -1,5 +1,6 @@
 package com.example.boardserver.board.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 import java.util.List;
@@ -13,7 +14,9 @@ import java.util.List;
  */
 @Builder
 public record BoardRequestDTO(
+        @NotBlank
         String title,
+        @NotBlank
         String content,
         String boardMainImg,
         List<String> boardImageList
