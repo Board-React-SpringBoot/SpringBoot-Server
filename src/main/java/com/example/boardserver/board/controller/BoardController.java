@@ -2,9 +2,11 @@ package com.example.boardserver.board.controller;
 
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.board.converter.BoardConverter;
+import com.example.boardserver.board.domain.BoardLikeId;
 import com.example.boardserver.board.dto.BoardRequestDTO;
 import com.example.boardserver.board.dto.BoardResponseDTO;
 import com.example.boardserver.board.dto.BoardResponseDetailDTO;
+import com.example.boardserver.board.service.boardLikeService.BoardLikeCommandService;
 import com.example.boardserver.board.service.boardService.BoardCommandService;
 import com.example.boardserver.board.service.boardService.BoardQueryService;
 import com.example.boardserver.common.ApiResponse;
@@ -22,6 +24,7 @@ public class BoardController {
 
     private final BoardCommandService boardCommandService;
     private final BoardQueryService boardQueryService;
+    private final BoardLikeCommandService boardLikeCommandService;
 
     @PostMapping("")
     public ApiResponse<BoardResponseDTO> postBoard(
@@ -40,5 +43,18 @@ public class BoardController {
             @PathVariable("boardId") Long boardId
     ) {
         return ApiResponse.onSuccess(boardQueryService.getBoardDetail(boardId));
+    }
+
+    @PutMapping("/{boardId}/like")
+    public ApiResponse<BoardResponseDetailDTO> putBoardLike(
+            @PathVariable("boardId") Long boardId,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return ApiResponse.onSuccess(
+                boardLikeCommandService.toggleBoardLike(
+                        new BoardLikeId(user.userId(), boardId
+                        )
+                )
+        );
     }
 }
