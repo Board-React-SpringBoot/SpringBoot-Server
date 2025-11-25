@@ -28,5 +28,5 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "boardId", nullable = false)
     private Board board;
 
-    private String comment;
+    private String content;
 }
