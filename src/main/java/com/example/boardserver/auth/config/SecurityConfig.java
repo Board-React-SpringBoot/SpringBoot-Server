@@ -14,6 +14,7 @@ import com.example.boardserver.auth.service.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -77,7 +78,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(PERMIT_URLS).permitAll()
-                        .requestMatchers("/api/v1/user/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/board/**", "/file/**").permitAll()
+                        .requestMatchers("/api/v1/user/**", "/api/v1/board/**", "/file/**").authenticated()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().permitAll())
 

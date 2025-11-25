@@ -30,6 +30,9 @@ public enum ErrorStatus implements BaseErrorCode {
     EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4002", "이미 존재하는 계정입니다."),
     NICKNAME_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4003", "이미 존재하는 닉네임입니다."),
 
+    // 게시물 관련 에러
+    BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "BOARD4001", "게시물이 존재하지 않습니다."),
+
     // 작성 예시
     TEST_EXCEPTION(HttpStatus.BAD_REQUEST, "TEST4001", "테스트용 에러입니다."),
     ;

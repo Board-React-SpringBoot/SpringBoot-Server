@@ -4,9 +4,9 @@ import com.example.boardserver.board.domain.Board;
 import com.example.boardserver.board.domain.BoardImg;
 import com.example.boardserver.board.dto.BoardRequestDTO;
 import com.example.boardserver.board.dto.BoardResponseDTO;
+import com.example.boardserver.board.dto.BoardResponseDetailDTO;
 import com.example.boardserver.user.domain.User;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class BoardConverter {
@@ -62,6 +62,33 @@ public class BoardConverter {
                 .viewCount(board.getViewCount())
                 .createdAt(board.getCreatedAt())
                 .updatedAt(board.getUpdatedAt())
+                .build();
+    }
+
+    /**
+     * Board Entity를 BoardResponseDetailDTO로 변환하는 메서드
+     * @param board Board
+     * @return BoardResponseDetailDTO
+     */
+    public static BoardResponseDetailDTO toBoardResponseDetailDTO(Board board) {
+        return  BoardResponseDetailDTO.builder()
+                .boardId(board.getBoardId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .boardImageList(board.getBoardImgList()
+                        .stream()
+                        .map(BoardImg::getImg)
+                        .toList()
+                )
+                .likeCount(board.getLikeCount())
+                .commentCount(board.getCommentCount())
+                .viewCount(board.getViewCount())
+                .createdAt(board.getCreatedAt())
+                .updatedAt(board.getUpdatedAt())
+                .userId(board.getUser().getUserId())
+                .email(board.getUser().getEmail())
+                .nickname(board.getUser().getNickname())
+                .profile(board.getUser().getProfile().isEmpty() ? null : board.getUser().getProfile())
                 .build();
     }
 }
