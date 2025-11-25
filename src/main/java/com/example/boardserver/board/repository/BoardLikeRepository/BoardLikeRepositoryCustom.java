@@ -1,4 +1,4 @@
-package com.example.boardserver.board.repository;
+package com.example.boardserver.board.repository.BoardLikeRepository;
 
 import com.example.boardserver.board.domain.BoardLikeId;
 import com.example.boardserver.board.dto.BoardLikeInfoDTO;
