@@ -3,9 +3,8 @@ package com.example.boardserver.board.controller;
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.board.converter.BoardConverter;
 import com.example.boardserver.board.domain.BoardLikeId;
-import com.example.boardserver.board.dto.BoardRequestDTO;
-import com.example.boardserver.board.dto.BoardResponseDTO;
-import com.example.boardserver.board.dto.BoardResponseDetailDTO;
+import com.example.boardserver.board.dto.*;
+import com.example.boardserver.board.service.CommentService.CommentCommandService;
 import com.example.boardserver.board.service.boardLikeService.BoardLikeCommandService;
 import com.example.boardserver.board.service.boardLikeService.BoardLikeQueryService;
 import com.example.boardserver.board.service.boardService.BoardCommandService;
@@ -27,6 +26,7 @@ public class BoardController {
     private final BoardQueryService boardQueryService;
     private final BoardLikeQueryService boardLikeQueryService;
     private final BoardLikeCommandService boardLikeCommandService;
+    private final CommentCommandService commentCommandService;
 
     @PostMapping("")
     public ApiResponse<BoardResponseDTO> postBoard(
@@ -65,6 +65,17 @@ public class BoardController {
                         new BoardLikeId(user.userId(), boardId
                         )
                 )
+        );
+    }
+
+    @PostMapping("/{boardId}/comment")
+    public ApiResponse<CommentResponseDTO> postComment(
+            @PathVariable("boardId") Long boardId,
+            @RequestBody @Valid CommentRequestDTO request,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return ApiResponse.onSuccess(
+                commentCommandService.saveComment(request, user.userId(), boardId)
         );
     }
 }
