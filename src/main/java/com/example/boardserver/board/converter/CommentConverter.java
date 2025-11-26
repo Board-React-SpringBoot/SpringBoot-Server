@@ -8,6 +8,7 @@ import com.example.boardserver.board.dto.CommentResponseDTO;
 import com.example.boardserver.user.domain.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CommentConverter {
 
@@ -36,7 +37,11 @@ public class CommentConverter {
                 .commentId(comment.getCommentId())
                 .userId(comment.getUser().getUserId())
                 .nickname(comment.getUser().getNickname())
-                .profile(comment.getUser().getProfile().isEmpty() ? null : comment.getUser().getProfile())
+                .profile(
+                        Optional.ofNullable(comment.getUser().getProfile())
+                                .filter(s -> !s.isEmpty())
+                                .orElse(null)
+                )
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
