@@ -1,11 +1,11 @@
-package com.example.boardserver.board.service.CommentService;
+package com.example.boardserver.board.service.commentService;
 
 import com.example.boardserver.board.converter.CommentConverter;
 import com.example.boardserver.board.domain.Board;
 import com.example.boardserver.board.domain.Comment;
 import com.example.boardserver.board.dto.CommentRequestDTO;
 import com.example.boardserver.board.dto.CommentResponseDTO;
-import com.example.boardserver.board.repository.CommentRepository.CommentRepository;
+import com.example.boardserver.board.repository.commentRepository.CommentRepository;
 import com.example.boardserver.board.repository.boardRepository.BoardRepository;
 import com.example.boardserver.common.code.status.ErrorStatus;
 import com.example.boardserver.exception.handler.BoardHandler;

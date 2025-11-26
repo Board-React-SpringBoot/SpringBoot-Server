@@ -1,4 +1,4 @@
-package com.example.boardserver.board.repository.CommentRepository;
+package com.example.boardserver.board.repository.commentRepository;
 
 import com.example.boardserver.board.domain.Comment;
 import org.springframework.data.repository.CrudRepository;
