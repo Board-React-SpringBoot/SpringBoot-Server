@@ -5,6 +5,8 @@ import com.example.boardserver.auth.dto.JoinResponseDTO;
 import com.example.boardserver.user.domain.User;
 import com.example.boardserver.user.domain.enums.RoleType;
 
+import java.util.Optional;
+
 public class JoinConverter {
 
     /**
@@ -50,7 +52,11 @@ public class JoinConverter {
                 .userid(user.getUserId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
-                .profile(user.getProfile())
+                .profile(
+                        Optional.ofNullable(user.getProfile())
+                                .filter(s -> !s.isEmpty())
+                                .orElse(null)
+                )
                 .role(user.getRole())
                 .social(user.getSocial())
                 .createdAt(user.getCreatedAt())

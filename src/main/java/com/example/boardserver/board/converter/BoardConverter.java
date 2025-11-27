@@ -8,6 +8,7 @@ import com.example.boardserver.board.dto.BoardResponseDetailDTO;
 import com.example.boardserver.user.domain.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BoardConverter {
 
@@ -88,7 +89,11 @@ public class BoardConverter {
                 .userId(board.getUser().getUserId())
                 .email(board.getUser().getEmail())
                 .nickname(board.getUser().getNickname())
-                .profile(board.getUser().getProfile().isEmpty() ? null : board.getUser().getProfile())
+                .profile(
+                        Optional.ofNullable(board.getUser().getProfile())
+                                .filter(s -> !s.isEmpty())
+                                .orElse(null)
+                )
                 .build();
     }
 }
