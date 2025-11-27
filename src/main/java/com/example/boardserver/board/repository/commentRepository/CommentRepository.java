@@ -12,5 +12,5 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
      * @param boardId Long
      * @return List<Comment>
      */
-    List<Comment> findAllByBoard_BoardId(Long boardId);
+    List<Comment> findAllByBoard_BoardIdOrderByCreatedAtDesc(Long boardId);
 }

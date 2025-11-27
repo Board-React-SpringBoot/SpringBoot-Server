@@ -49,6 +49,16 @@ public class BoardController {
         return ApiResponse.onSuccess(boardQueryService.getBoardDetail(boardId));
     }
 
+    @DeleteMapping("/{boardId}")
+    public ApiResponse<Boolean> deleteBoard(
+            @PathVariable("boardId") Long boardId,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        boardCommandService.deleteBoard(boardId, user.userId());
+
+        return ApiResponse.onSuccess(Boolean.TRUE);
+    }
+
     @GetMapping("/{boardId}/like")
     public ApiResponse<Boolean> getBoardLike(
             @PathVariable("boardId") Long boardId,

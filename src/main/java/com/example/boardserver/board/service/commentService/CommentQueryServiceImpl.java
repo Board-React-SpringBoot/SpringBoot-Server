@@ -20,6 +20,6 @@ public class CommentQueryServiceImpl implements CommentQueryService {
     public CommentListResponseDTO getCommentsList(Long boardId) {
         boardRepository.findByBoardId(boardId).orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
 
-        return CommentConverter.toCommentListResponseDTO(commentRepository.findAllByBoard_BoardId(boardId));
+        return CommentConverter.toCommentListResponseDTO(commentRepository.findAllByBoard_BoardIdOrderByCreatedAtDesc(boardId));
     }
 }
