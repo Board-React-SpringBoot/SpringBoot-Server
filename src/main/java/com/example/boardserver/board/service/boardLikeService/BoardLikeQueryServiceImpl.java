@@ -1,7 +1,7 @@
 package com.example.boardserver.board.service.boardLikeService;
 
 import com.example.boardserver.board.domain.BoardLikeId;
-import com.example.boardserver.board.repository.BoardLikeRepository.BoardLikeRepository;
+import com.example.boardserver.board.repository.boardLikeRepository.BoardLikeRepository;
 import com.example.boardserver.board.repository.boardRepository.BoardRepository;
 import com.example.boardserver.common.code.status.ErrorStatus;
 import com.example.boardserver.exception.handler.BoardHandler;

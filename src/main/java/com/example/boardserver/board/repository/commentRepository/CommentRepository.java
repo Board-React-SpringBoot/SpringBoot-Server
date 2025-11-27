@@ -1,4 +1,4 @@
-package com.example.boardserver.board.repository.CommentRepository;
+package com.example.boardserver.board.repository.commentRepository;
 
 import com.example.boardserver.board.domain.Comment;
 import org.springframework.data.repository.CrudRepository;
@@ -12,5 +12,5 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
      * @param boardId Long
      * @return List<Comment>
      */
-    List<Comment> findAllByBoard_BoardId(Long boardId);
+    List<Comment> findAllByBoard_BoardIdOrderByCreatedAtDesc(Long boardId);
 }

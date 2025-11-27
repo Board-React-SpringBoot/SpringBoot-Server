@@ -3,6 +3,8 @@ package com.example.boardserver.user.converter;
 import com.example.boardserver.user.domain.User;
 import com.example.boardserver.user.dto.UserResponse;
 
+import java.util.Optional;
+
 public class UserResponseConverter {
 
     /**
@@ -15,7 +17,11 @@ public class UserResponseConverter {
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
-                .profile(user.getProfile())
+                .profile(
+                        Optional.ofNullable(user.getProfile())
+                                .filter(s -> !s.isEmpty())
+                                .orElse(null)
+                )
                 .role(user.getRole())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())

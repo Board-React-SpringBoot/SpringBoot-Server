@@ -4,8 +4,8 @@ import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.board.converter.BoardConverter;
 import com.example.boardserver.board.domain.BoardLikeId;
 import com.example.boardserver.board.dto.*;
-import com.example.boardserver.board.service.CommentService.CommentCommandService;
-import com.example.boardserver.board.service.CommentService.CommentQueryService;
+import com.example.boardserver.board.service.commentService.CommentCommandService;
+import com.example.boardserver.board.service.commentService.CommentQueryService;
 import com.example.boardserver.board.service.boardLikeService.BoardLikeCommandService;
 import com.example.boardserver.board.service.boardLikeService.BoardLikeQueryService;
 import com.example.boardserver.board.service.boardService.BoardCommandService;
@@ -47,6 +47,16 @@ public class BoardController {
             @PathVariable("boardId") Long boardId
     ) {
         return ApiResponse.onSuccess(boardQueryService.getBoardDetail(boardId));
+    }
+
+    @DeleteMapping("/{boardId}")
+    public ApiResponse<Boolean> deleteBoard(
+            @PathVariable("boardId") Long boardId,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        boardCommandService.deleteBoard(boardId, user.userId());
+
+        return ApiResponse.onSuccess(Boolean.TRUE);
     }
 
     @GetMapping("/{boardId}/like")

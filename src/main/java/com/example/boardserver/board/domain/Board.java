@@ -48,11 +48,11 @@ public class Board extends BaseEntity {
     private Integer viewCount = 0;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardImg> boardImgList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     public void inCreaseViewCount() {

@@ -26,12 +26,13 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "JWT4017", "유효하지 않은 Refresh 토큰입니다."),
 
     // 유저 관련 에러
-    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "유저가 없습니다."),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "유저가 없습니다."),
     EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4002", "이미 존재하는 계정입니다."),
     NICKNAME_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4003", "이미 존재하는 닉네임입니다."),
 
     // 게시물 관련 에러
-    BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "BOARD4001", "게시물이 존재하지 않습니다."),
+    BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD4001", "게시물이 존재하지 않습니다."),
+    BOARD_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "BOARD4002", "해당 게시물을 삭제할 권한이 없습니다."),
 
     // 작성 예시
     TEST_EXCEPTION(HttpStatus.BAD_REQUEST, "TEST4001", "테스트용 에러입니다."),
