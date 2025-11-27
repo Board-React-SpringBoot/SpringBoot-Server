@@ -6,6 +6,7 @@ import com.example.boardserver.board.dto.CommentListResponseDTO;
 import com.example.boardserver.board.dto.CommentRequestDTO;
 import com.example.boardserver.board.dto.CommentResponseDTO;
 import com.example.boardserver.user.domain.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,12 +54,20 @@ public class CommentConverter {
      * @param commentList List<Comment>
      * @return CommentResponseDTO.CommentListResponseDTO
      */
-    public static CommentListResponseDTO toCommentListResponseDTO(List<Comment> commentList) {
+    public static CommentListResponseDTO toCommentListResponseDTO(Page<Comment> commentList) {
+
+        List<CommentResponseDTO> commentResponseDTOList = commentList
+                .stream()
+                .map(CommentConverter::toCommentResponseDTO)
+                .toList();
+
         return CommentListResponseDTO.builder()
-                .commentList(commentList.stream()
-                        .map(CommentConverter::toCommentResponseDTO)
-                        .toList()
-                )
+                .commentList(commentResponseDTOList)
+                .listSize(commentResponseDTOList.size())
+                .totalPage(commentList.getTotalPages())
+                .totalElements(commentList.getTotalElements())
+                .isFirst(commentList.isFirst())
+                .isLast(commentList.isLast())
                 .build();
     }
 }
