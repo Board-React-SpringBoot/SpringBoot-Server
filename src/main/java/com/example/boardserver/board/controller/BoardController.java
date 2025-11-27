@@ -93,8 +93,9 @@ public class BoardController {
 
     @GetMapping("/{boardId}/comment")
     public ApiResponse<CommentListResponseDTO> getCommentList(
-            @PathVariable("boardId") Long boardId
+            @PathVariable("boardId") Long boardId,
+            @RequestParam(defaultValue = "1") Integer page
     ) {
-        return ApiResponse.onSuccess(commentQueryService.getCommentsList(boardId));
+        return ApiResponse.onSuccess(commentQueryService.getCommentsList(boardId, page - 1));
     }
 }
