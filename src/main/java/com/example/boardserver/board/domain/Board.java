@@ -1,6 +1,6 @@
 package com.example.boardserver.board.domain;
 
-import com.example.boardserver.board.dto.BoardRequestDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardRequestDTO;
 import com.example.boardserver.common.domain.BaseEntity;
 import com.example.boardserver.user.domain.User;
 import jakarta.persistence.*;

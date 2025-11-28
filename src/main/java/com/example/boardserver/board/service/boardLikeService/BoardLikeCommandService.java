@@ -1,7 +1,7 @@
 package com.example.boardserver.board.service.boardLikeService;
 
 import com.example.boardserver.board.domain.BoardLikeId;
-import com.example.boardserver.board.dto.BoardResponseDetailDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
 
 public interface BoardLikeCommandService {
 

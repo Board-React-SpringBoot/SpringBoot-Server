@@ -2,9 +2,9 @@ package com.example.boardserver.board.converter;
 
 import com.example.boardserver.board.domain.Board;
 import com.example.boardserver.board.domain.Comment;
-import com.example.boardserver.board.dto.CommentListResponseDTO;
-import com.example.boardserver.board.dto.CommentRequestDTO;
-import com.example.boardserver.board.dto.CommentResponseDTO;
+import com.example.boardserver.board.dto.commentDTO.CommentListResponseDTO;
+import com.example.boardserver.board.dto.commentDTO.CommentRequestDTO;
+import com.example.boardserver.board.dto.commentDTO.CommentResponseDTO;
 import com.example.boardserver.user.domain.User;
 import org.springframework.data.domain.Page;
 
@@ -51,8 +51,8 @@ public class CommentConverter {
 
     /**
      * 특정 게시물의 모든 Comment List를 CommentListResponseDTO로 변환하는 메서드
-     * @param commentList List<Comment>
-     * @return CommentResponseDTO.CommentListResponseDTO
+     * @param commentList Page<Comment>
+     * @return CommentListResponseDTO
      */
     public static CommentListResponseDTO toCommentListResponseDTO(Page<Comment> commentList) {
 

@@ -1,4 +1,4 @@
-package com.example.boardserver.board.dto;
+package com.example.boardserver.board.dto.boardDTO;
 
 import lombok.Builder;
 
@@ -37,5 +37,4 @@ public record BoardResponseDetailDTO(
         String nickname,
         String profile
         ) {
-
 }

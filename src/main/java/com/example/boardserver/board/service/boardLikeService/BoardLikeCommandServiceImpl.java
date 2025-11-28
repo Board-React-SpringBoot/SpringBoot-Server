@@ -5,7 +5,7 @@ import com.example.boardserver.board.converter.BoardLikeConverter;
 import com.example.boardserver.board.domain.Board;
 import com.example.boardserver.board.domain.BoardLike;
 import com.example.boardserver.board.domain.BoardLikeId;
-import com.example.boardserver.board.dto.BoardResponseDetailDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
 import com.example.boardserver.board.repository.boardLikeRepository.BoardLikeRepository;
 import com.example.boardserver.board.repository.boardRepository.BoardRepository;
 import com.example.boardserver.common.code.status.ErrorStatus;

@@ -1,12 +1,12 @@
-package com.example.boardserver.board.dto;
+package com.example.boardserver.board.dto.boardDTO;
 
 import lombok.Builder;
 
 import java.util.List;
 
 /**
- * 해당 게시물의 모든 댓글을 조회한 Response DTO
- * @param commentList List<CommentResponseDTO>
+ * 게시물 리스트를 조회한 Response DTO
+ * @param boardList List<BoardList>
  * @param listSize Integer
  * @param totalPage Integer
  * @param totalElements Long
@@ -14,11 +14,12 @@ import java.util.List;
  * @param isLast Boolean
  */
 @Builder
-public record CommentListResponseDTO(
-        List<CommentResponseDTO> commentList,
+public record BoardListPageResponseDTO(
+        List<BoardList> boardList,
         Integer listSize,
         Integer totalPage,
         Long totalElements,
         Boolean isFirst,
         Boolean isLast
-) {}
+) {
+}
