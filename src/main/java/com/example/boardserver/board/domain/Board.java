@@ -1,5 +1,6 @@
 package com.example.boardserver.board.domain;
 
+import com.example.boardserver.board.dto.BoardRequestDTO;
 import com.example.boardserver.common.domain.BaseEntity;
 import com.example.boardserver.user.domain.User;
 import jakarta.persistence.*;
@@ -73,5 +74,24 @@ public class Board extends BaseEntity {
 
     public void decreaseCommentCount() {
         this.commentCount = this.commentCount - 1;
+    }
+
+    public void patchBoard (BoardRequestDTO request) {
+        this.title = request.title();
+        this.content = request.content();
+        this.mainImg = request.boardMainImg();
+
+        this.boardImgList.clear();
+
+        if (request.boardMainImg() != null) {
+            for (String imgUrl : request.boardImageList()) {
+                BoardImg boardImg = BoardImg.builder()
+                        .board(this)
+                        .img(imgUrl)
+                        .build();
+
+                this.boardImgList.add(boardImg);
+            }
+        }
     }
 }

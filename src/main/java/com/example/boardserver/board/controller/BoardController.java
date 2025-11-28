@@ -59,6 +59,19 @@ public class BoardController {
         return ApiResponse.onSuccess(Boolean.TRUE);
     }
 
+    @PatchMapping("/{boardId}")
+    public ApiResponse<BoardResponseDTO> patchBoard(
+            @PathVariable("boardId") Long boardId,
+            @RequestBody @Valid BoardRequestDTO request,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return ApiResponse.onSuccess(
+                BoardConverter.toBoardResponseDTO(
+                        boardCommandService.patchBoard(request, user.userId(), boardId)
+                )
+        );
+    }
+
     @GetMapping("/{boardId}/like")
     public ApiResponse<Boolean> getBoardLike(
             @PathVariable("boardId") Long boardId,
