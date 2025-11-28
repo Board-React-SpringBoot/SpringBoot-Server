@@ -1,6 +1,7 @@
 package com.example.boardserver.board.service.boardService;
 
 import com.example.boardserver.board.dto.boardDTO.BoardListPageResponseDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardListResponseDTO;
 import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
 
 public interface BoardQueryService {
@@ -18,4 +19,10 @@ public interface BoardQueryService {
      * @return BoardListPageResponseDTO
      */
     BoardListPageResponseDTO getBoardLatestList(Integer page);
+
+    /**
+     * 주간 Top3 게시물 리스트를 조회하는 Service 메서드
+     * @return BoardListResponseDTO
+     */
+    BoardListResponseDTO getBoardTop3List();
 }

@@ -142,4 +142,21 @@ public class BoardConverter {
                 .isLast(boardList.isLast())
                 .build();
     }
+
+    /**
+     * Board Entity List를 주간 Top3용 BoardListResponseDTO 객체로 변환하는 메서드
+     * @param boardList List<Board>
+     * @return BoardListResponseDTO
+     */
+    public static BoardListResponseDTO toBoardListResponseDTO(List<Board> boardList) {
+        List<BoardList> boards = boardList
+                .stream()
+                .map(BoardConverter::toBoardList)
+                .toList();
+
+        return  BoardListResponseDTO
+                .builder()
+                .boardList(boards)
+                .build();
+    }
 }
