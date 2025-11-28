@@ -3,10 +3,7 @@ package com.example.boardserver.board.controller;
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.board.converter.BoardConverter;
 import com.example.boardserver.board.domain.BoardLikeId;
-import com.example.boardserver.board.dto.boardDTO.BoardListPageResponseDTO;
-import com.example.boardserver.board.dto.boardDTO.BoardRequestDTO;
-import com.example.boardserver.board.dto.boardDTO.BoardResponseDTO;
-import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
+import com.example.boardserver.board.dto.boardDTO.*;
 import com.example.boardserver.board.dto.commentDTO.CommentListResponseDTO;
 import com.example.boardserver.board.dto.commentDTO.CommentRequestDTO;
 import com.example.boardserver.board.dto.commentDTO.CommentResponseDTO;
@@ -123,5 +120,10 @@ public class BoardController {
             @RequestParam(defaultValue = "1") Integer page
     ) {
         return ApiResponse.onSuccess(boardQueryService.getBoardLatestList(page - 1));
+    }
+
+    @GetMapping("/top3")
+    public ApiResponse<BoardListResponseDTO> getBoardTop3() {
+        return ApiResponse.onSuccess(boardQueryService.getBoardTop3List());
     }
 }

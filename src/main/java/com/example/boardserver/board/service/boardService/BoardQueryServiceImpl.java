@@ -3,6 +3,7 @@ package com.example.boardserver.board.service.boardService;
 import com.example.boardserver.board.converter.BoardConverter;
 import com.example.boardserver.board.domain.Board;
 import com.example.boardserver.board.dto.boardDTO.BoardListPageResponseDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardListResponseDTO;
 import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
 import com.example.boardserver.board.repository.boardRepository.BoardRepository;
 import com.example.boardserver.common.code.status.ErrorStatus;
@@ -35,6 +36,13 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
         return BoardConverter.toBoardListPageDTO(
                 boardRepository.findAll(pageable)
+        );
+    }
+
+    @Override
+    public BoardListResponseDTO getBoardTop3List() {
+        return BoardConverter.toBoardListResponseDTO(
+                boardRepository.findWeeklyTop3BoardList()
         );
     }
 }
