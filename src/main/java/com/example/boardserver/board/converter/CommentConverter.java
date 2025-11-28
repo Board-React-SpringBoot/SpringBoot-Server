@@ -51,8 +51,8 @@ public class CommentConverter {
 
     /**
      * 특정 게시물의 모든 Comment List를 CommentListResponseDTO로 변환하는 메서드
-     * @param commentList List<Comment>
-     * @return CommentResponseDTO.CommentListResponseDTO
+     * @param commentList Page<Comment>
+     * @return CommentListResponseDTO
      */
     public static CommentListResponseDTO toCommentListResponseDTO(Page<Comment> commentList) {
 

@@ -2,10 +2,9 @@ package com.example.boardserver.board.converter;
 
 import com.example.boardserver.board.domain.Board;
 import com.example.boardserver.board.domain.BoardImg;
-import com.example.boardserver.board.dto.boardDTO.BoardRequestDTO;
-import com.example.boardserver.board.dto.boardDTO.BoardResponseDTO;
-import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
+import com.example.boardserver.board.dto.boardDTO.*;
 import com.example.boardserver.user.domain.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -94,6 +93,53 @@ public class BoardConverter {
                                 .filter(s -> !s.isEmpty())
                                 .orElse(null)
                 )
+                .build();
+    }
+
+    /**
+     * Board Entity를 BoardList로 변환하는 메서드
+     * @param board Board
+     * @return BoardList
+     */
+    public static BoardList toBoardList(Board board) {
+        return BoardList.builder()
+                .boardId(board.getBoardId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .boardTitleImage(board.getMainImg())
+                .likeCount(board.getLikeCount())
+                .commentCount(board.getCommentCount())
+                .viewCount(board.getViewCount())
+                .createdAt(board.getCreatedAt())
+                .updatedAt(board.getUpdatedAt())
+                .userId(board.getUser().getUserId())
+                .nickname(board.getUser().getNickname())
+                .profile(
+                        Optional.ofNullable(board.getUser().getProfile())
+                                .filter(s -> !s.isEmpty())
+                                .orElse(null)
+                )
+                .build();
+    }
+
+    /**
+     * 게시물 List를 BoardListPageResponseDTO로 변환하는 메서드
+     * @param boardList Page<Comment>
+     * @return BoardListPageResponseDTO
+     */
+    public static BoardListPageResponseDTO toBoardListPageDTO(Page<Board> boardList) {
+        List<BoardList> boards = boardList
+                .stream()
+                .map(BoardConverter::toBoardList)
+                .toList();
+
+        return BoardListPageResponseDTO.builder()
+                .boardList(boards)
+                .listSize(boards.size())
+                .totalPage(boardList.getTotalPages())
+                .totalElements(boardList.getTotalElements())
+                .isFirst(boardList.isFirst())
+                .isLast(boardList.isLast())
                 .build();
     }
 }

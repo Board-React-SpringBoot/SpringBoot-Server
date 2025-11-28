@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 게시물 상세보기 Response DTO
+ * 게시물 목록 객체
  * @param boardId Long
  * @param title String
  * @param content String
- * @param boardImageList String[]
+ * @param boardTitleImage String
  * @param likeCount Integer
  * @param commentCount String
  * @param viewCount String
@@ -22,11 +22,11 @@ import java.util.List;
  * @param profile String
  */
 @Builder
-public record BoardResponseDetailDTO(
+public record BoardList(
         Long boardId,
         String title,
         String content,
-        List<String> boardImageList,
+        String boardTitleImage,
         Integer likeCount,
         Integer commentCount,
         Integer viewCount,
@@ -36,5 +36,5 @@ public record BoardResponseDetailDTO(
         String email,
         String nickname,
         String profile
-        ) {
+) {
 }

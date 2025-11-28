@@ -3,6 +3,7 @@ package com.example.boardserver.board.controller;
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.board.converter.BoardConverter;
 import com.example.boardserver.board.domain.BoardLikeId;
+import com.example.boardserver.board.dto.boardDTO.BoardListPageResponseDTO;
 import com.example.boardserver.board.dto.boardDTO.BoardRequestDTO;
 import com.example.boardserver.board.dto.boardDTO.BoardResponseDTO;
 import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
@@ -115,5 +116,12 @@ public class BoardController {
             @RequestParam(defaultValue = "1") Integer page
     ) {
         return ApiResponse.onSuccess(commentQueryService.getCommentsList(boardId, page - 1));
+    }
+
+    @GetMapping("")
+    public ApiResponse<BoardListPageResponseDTO> getBoardLatest(
+            @RequestParam(defaultValue = "1") Integer page
+    ) {
+        return ApiResponse.onSuccess(boardQueryService.getBoardLatestList(page - 1));
     }
 }
