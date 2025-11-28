@@ -1,7 +1,7 @@
 package com.example.boardserver.board.service.boardService;
 
 import com.example.boardserver.board.domain.Board;
-import com.example.boardserver.board.dto.BoardRequestDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardRequestDTO;
 
 public interface BoardCommandService {
 

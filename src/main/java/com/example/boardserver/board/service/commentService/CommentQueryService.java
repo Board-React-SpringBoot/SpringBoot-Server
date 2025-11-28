@@ -1,6 +1,6 @@
 package com.example.boardserver.board.service.commentService;
 
-import com.example.boardserver.board.dto.CommentListResponseDTO;
+import com.example.boardserver.board.dto.commentDTO.CommentListResponseDTO;
 
 public interface CommentQueryService {
 

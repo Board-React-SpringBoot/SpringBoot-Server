@@ -1,6 +1,6 @@
 package com.example.boardserver.board.service.boardService;
 
-import com.example.boardserver.board.dto.BoardResponseDetailDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
 
 public interface BoardQueryService {
 

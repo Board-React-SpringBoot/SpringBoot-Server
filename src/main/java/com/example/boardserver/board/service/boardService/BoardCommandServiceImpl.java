@@ -2,7 +2,7 @@ package com.example.boardserver.board.service.boardService;
 
 import com.example.boardserver.board.converter.BoardConverter;
 import com.example.boardserver.board.domain.Board;
-import com.example.boardserver.board.dto.BoardRequestDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardRequestDTO;
 import com.example.boardserver.board.repository.boardImgRepository.BoardImgRepository;
 import com.example.boardserver.board.repository.boardRepository.BoardRepository;
 import com.example.boardserver.common.code.status.ErrorStatus;

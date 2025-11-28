@@ -1,7 +1,7 @@
 package com.example.boardserver.board.service.commentService;
 
 import com.example.boardserver.board.converter.CommentConverter;
-import com.example.boardserver.board.dto.CommentListResponseDTO;
+import com.example.boardserver.board.dto.commentDTO.CommentListResponseDTO;
 import com.example.boardserver.board.repository.commentRepository.CommentRepository;
 import com.example.boardserver.board.repository.boardRepository.BoardRepository;
 import com.example.boardserver.common.code.status.ErrorStatus;

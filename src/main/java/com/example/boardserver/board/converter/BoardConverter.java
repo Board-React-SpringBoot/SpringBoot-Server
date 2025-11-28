@@ -2,9 +2,9 @@ package com.example.boardserver.board.converter;
 
 import com.example.boardserver.board.domain.Board;
 import com.example.boardserver.board.domain.BoardImg;
-import com.example.boardserver.board.dto.BoardRequestDTO;
-import com.example.boardserver.board.dto.BoardResponseDTO;
-import com.example.boardserver.board.dto.BoardResponseDetailDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardRequestDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardResponseDTO;
+import com.example.boardserver.board.dto.boardDTO.BoardResponseDetailDTO;
 import com.example.boardserver.user.domain.User;
 
 import java.util.List;

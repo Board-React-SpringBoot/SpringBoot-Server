@@ -2,9 +2,9 @@ package com.example.boardserver.board.converter;
 
 import com.example.boardserver.board.domain.Board;
 import com.example.boardserver.board.domain.Comment;
-import com.example.boardserver.board.dto.CommentListResponseDTO;
-import com.example.boardserver.board.dto.CommentRequestDTO;
-import com.example.boardserver.board.dto.CommentResponseDTO;
+import com.example.boardserver.board.dto.commentDTO.CommentListResponseDTO;
+import com.example.boardserver.board.dto.commentDTO.CommentRequestDTO;
+import com.example.boardserver.board.dto.commentDTO.CommentResponseDTO;
 import com.example.boardserver.user.domain.User;
 import org.springframework.data.domain.Page;
 
