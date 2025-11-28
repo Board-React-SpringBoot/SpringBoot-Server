@@ -19,4 +19,13 @@ public interface BoardCommandService {
      * @param userId Long
      */
     void deleteBoard(Long boardId, Long userId);
+
+    /**
+     * 특정 게시물을 수정하는 Service 메서드
+     * @param request BoardRequestDTO
+     * @param userId Long
+     * @param boardId Long
+     * @return Board
+     */
+    Board patchBoard(BoardRequestDTO request, Long userId, Long boardId);
 }

@@ -41,4 +41,17 @@ public class BoardCommandServiceImpl implements BoardCommandService {
 
         boardRepository.delete(board);
     }
+
+    @Override
+    public Board patchBoard(BoardRequestDTO request, Long userId, Long boardId) {
+        Board board = boardRepository.findByBoardId(boardId).orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        if (!board.getUser().equals(user))
+            throw new BoardHandler(ErrorStatus.BOARD_UNAUTHORIZED);
+
+        board.patchBoard(request);
+
+        return boardRepository.save(board);
+    }
 }

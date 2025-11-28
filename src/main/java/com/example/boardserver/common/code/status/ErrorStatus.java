@@ -32,7 +32,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 게시물 관련 에러
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD4001", "게시물이 존재하지 않습니다."),
-    BOARD_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "BOARD4002", "해당 게시물을 삭제할 권한이 없습니다."),
+    BOARD_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "BOARD4002", "해당 게시물에 접근할 권한이 없습니다."),
 
     // 작성 예시
     TEST_EXCEPTION(HttpStatus.BAD_REQUEST, "TEST4001", "테스트용 에러입니다."),
