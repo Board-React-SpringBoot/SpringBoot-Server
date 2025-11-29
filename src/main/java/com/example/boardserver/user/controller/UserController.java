@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,6 +52,17 @@ public class UserController {
         return ApiResponse.onSuccess(
                 UserConverter.toUserMyPageResponseDTO(
                         userQueryService.getDetailUser(user.getUserId())
+                )
+        );
+    }
+
+    @GetMapping("/{userId}")
+    public ApiResponse<UserResponseDTO> getUser(
+            @PathVariable("userId") Long userId
+    ) {
+        return ApiResponse.onSuccess(
+                UserConverter.toUserResponseDTO(
+                        userQueryService.getDetailUser(userId)
                 )
         );
     }

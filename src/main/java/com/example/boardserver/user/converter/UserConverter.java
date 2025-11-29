@@ -28,4 +28,19 @@ public class UserConverter {
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
+
+    public static UserResponseDTO toUserResponseDTO(User user) {
+        return UserResponseDTO.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .profile(
+                        Optional.ofNullable(user.getProfile())
+                                .filter(s -> !s.isEmpty())
+                                .orElse(null)
+                )
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build();
+    }
 }
