@@ -22,4 +22,12 @@ public interface BoardRepository extends JpaRepository<Board, Integer>, BoardRep
      * @return Page<Board>
      */
     Page<Board> findAll(Pageable pageable);
+
+    /**
+     * 해당 검색어를 포함한 제목을 가진 게시물 리스트 조회하는 Repository 메서드
+     * @param title String
+     * @param pageable Pageable
+     * @return Page<Board>
+     */
+    Page<Board> findByTitleContaining(String title, Pageable pageable);
 }

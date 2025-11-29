@@ -75,6 +75,13 @@ public class BoardController {
         );
     }
 
+    @GetMapping("/search")
+    public ApiResponse<BoardListPageResponseDTO> searchBoard(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "") String title) {
+        return ApiResponse.onSuccess(boardQueryService.getSearchBoardList(title, page - 1));
+    }
+
     @GetMapping("/{boardId}/like")
     public ApiResponse<Boolean> getBoardLike(
             @PathVariable("boardId") Long boardId,
