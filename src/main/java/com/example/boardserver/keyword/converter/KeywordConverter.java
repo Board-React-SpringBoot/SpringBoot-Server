@@ -32,7 +32,7 @@ public class KeywordConverter {
 
         return KeywordListResponseDTO
                 .builder()
-                .KeyWordList(keywordList)
+                .keyWordList(keywordList)
                 .build();
     }
 }
