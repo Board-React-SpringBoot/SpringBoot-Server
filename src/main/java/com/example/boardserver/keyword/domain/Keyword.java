@@ -23,5 +23,9 @@ public class Keyword {
 
     @Column(nullable = false)
     @Builder.Default
-    private Integer count = 0;
+    private Integer count = 1;
+
+    public void increaseCount() {
+        this.count = this.count + 1;
+    }
 }
