@@ -56,11 +56,11 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
-    public void inCreaseViewCount() {
+    public void increaseViewCount() {
         this.viewCount = this.viewCount + 1;
     }
 
-    public void inCreaseLikeCount() {
+    public void increaseLikeCount() {
         this.likeCount = this.likeCount + 1;
     }
 
@@ -68,7 +68,7 @@ public class Board extends BaseEntity {
         this.likeCount = this.likeCount - 1;
     }
 
-    public void inCreaseCommentCount() {
+    public void increaseCommentCount() {
         this.commentCount = this.commentCount + 1;
     }
 

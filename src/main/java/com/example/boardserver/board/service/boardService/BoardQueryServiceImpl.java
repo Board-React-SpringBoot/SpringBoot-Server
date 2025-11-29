@@ -24,7 +24,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
     public BoardResponseDetailDTO getBoardDetail(Long boardId) {
 
         Board board = boardRepository.findByBoardId(boardId).orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
-        board.inCreaseViewCount();
+        board.increaseViewCount();
         boardRepository.save(board);
 
         return BoardConverter.toBoardResponseDetailDTO(board);

@@ -29,7 +29,7 @@ public class CommentCommandServiceImpl implements CommentCommandService {
         Board board = boardRepository.findByBoardId(boardId).orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
 
         Comment comment = commentRepository.save(CommentConverter.toComment(request, board, user));
-        board.inCreaseCommentCount();
+        board.increaseCommentCount();
         boardRepository.save(board);
 
         return CommentConverter.toCommentResponseDTO(comment);

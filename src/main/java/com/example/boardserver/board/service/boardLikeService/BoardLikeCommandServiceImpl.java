@@ -43,7 +43,7 @@ public class BoardLikeCommandServiceImpl implements BoardLikeCommandService {
         // 좋아요가 존재하지 않을 경우 -> DB에서 좋아요 추가 -> 해당 게시물의 좋아요 수 +1
         if (boardLike.isEmpty()) {
             boardLikeRepository.save(BoardLikeConverter.toBoardLike(user, board));
-            board.inCreaseLikeCount();
+            board.increaseLikeCount();
             boardRepository.save(board);
         }
 
