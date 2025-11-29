@@ -35,4 +35,16 @@ public class KeywordConverter {
                 .keyWordList(keywordList)
                 .build();
     }
+
+    /**
+     * 조회한 연관 키워드 리스트를 KeywordListResponseDTO 객체로 변환하는 메서드
+     * @param keywords List<String>
+     * @return KeywordListResponseDTO
+     */
+    public static KeywordListResponseDTO toRelatedKeywordList(List<String> keywords) {
+        return KeywordListResponseDTO
+                .builder()
+                .keyWordList(keywords)
+                .build();
+    }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface KeywordRepository extends JpaRepository<Keyword, Integer> {
+public interface KeywordRepository extends JpaRepository<Keyword, Integer>, KeywordRepositoryCustom {
 
     /**
      * 키워드 List를 검색된 횟수 순으로 정렬하여 조회하는 Repository 메서드

@@ -55,20 +55,20 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
     @Override
     @Transactional
-    public BoardListPageResponseDTO getSearchBoardList(String title, Integer page) {
+    public BoardListPageResponseDTO getSearchBoardList(String keyword, Integer page) {
         Pageable pageable = PageRequest.of(page, 5);
 
-        Optional<Keyword> keyword = keywordRepository.findByKeyword(title);
+        Optional<Keyword> word = keywordRepository.findByKeyword(keyword);
 
-        if (keyword.isPresent()) {
-            keyword.get().increaseCount();
-            keywordRepository.save(keyword.get());
+        if (word.isPresent()) {
+            word.get().increaseCount();
+            keywordRepository.save(word.get());
         } else {
-            keywordRepository.save(KeywordConverter.toKeyword(title));
+            keywordRepository.save(KeywordConverter.toKeyword(keyword));
         }
 
         return BoardConverter.toBoardListPageDTO(
-                boardRepository.searchBoardList(title, pageable)
+                boardRepository.searchBoardList(keyword, pageable)
         );
     }
 }

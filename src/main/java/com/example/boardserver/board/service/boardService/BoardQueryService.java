@@ -28,9 +28,9 @@ public interface BoardQueryService {
 
     /**
      * 특정 검색어를 포함하는 제목을 가진 게시물 리스트를 조회하는 Service 메서드
-     * @param title String
+     * @param keyword String
      * @param page Integer
      * @return BoardListPageResponseDTO
      */
-    BoardListPageResponseDTO getSearchBoardList(String title, Integer page);
+    BoardListPageResponseDTO getSearchBoardList(String keyword, Integer page);
 }
