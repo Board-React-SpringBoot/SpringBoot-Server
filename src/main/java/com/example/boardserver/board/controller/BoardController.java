@@ -82,6 +82,14 @@ public class BoardController {
         return ApiResponse.onSuccess(boardQueryService.getSearchBoardList(keyword, page - 1));
     }
 
+    @GetMapping("/user/{userId}")
+    public ApiResponse<BoardListPageResponseDTO> getBoardByUserId(
+            @PathVariable("userId") Long userId,
+            @RequestParam(defaultValue = "1") Integer page
+    ) {
+        return ApiResponse.onSuccess(boardQueryService.getBoardListByUserId(userId, page - 1));
+    }
+
     @GetMapping("/{boardId}/like")
     public ApiResponse<Boolean> getBoardLike(
             @PathVariable("boardId") Long boardId,

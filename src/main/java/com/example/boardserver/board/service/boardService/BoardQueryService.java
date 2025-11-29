@@ -33,4 +33,12 @@ public interface BoardQueryService {
      * @return BoardListPageResponseDTO
      */
     BoardListPageResponseDTO getSearchBoardList(String keyword, Integer page);
+
+    /**
+     * UserId를 통해 특정 유저가 업로드한 모든 게시물 리스트를 조회하는 Service 메서드
+     * @param userId Long
+     * @param page Integer
+     * @return BoardListPageResponseDTO
+     */
+    BoardListPageResponseDTO getBoardListByUserId(Long userId, Integer page);
 }
