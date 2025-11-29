@@ -30,4 +30,12 @@ public interface BoardRepository extends JpaRepository<Board, Integer>, BoardRep
      * @return Page<Board>
      */
     Page<Board> findByTitleContaining(String title, Pageable pageable);
+
+    /**
+     * UserId를 통해 특정 유저가 업로드한 모든 게시물 리스트를 조회하는 Repository 메서드
+     * @param userId Long
+     * @param pageable Pageable
+     * @return Page<Board>
+     */
+    Page<Board> findAllByUser_UserId(Long userId, Pageable pageable);
 }

@@ -11,6 +11,7 @@ import com.example.boardserver.exception.handler.BoardHandler;
 import com.example.boardserver.keyword.converter.KeywordConverter;
 import com.example.boardserver.keyword.domain.Keyword;
 import com.example.boardserver.keyword.repository.KeywordRepository;
+import com.example.boardserver.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
     private final BoardRepository boardRepository;
     private final KeywordRepository keywordRepository;
+    private final UserRepository userRepository;
 
     @Override
     public BoardResponseDetailDTO getBoardDetail(Long boardId) {
@@ -69,6 +71,17 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
         return BoardConverter.toBoardListPageDTO(
                 boardRepository.searchBoardList(keyword, pageable)
+        );
+    }
+
+    @Override
+    public BoardListPageResponseDTO getBoardListByUserId(Long userId, Integer page) {
+        userRepository.findById(userId).orElseThrow(() -> new BoardHandler(ErrorStatus.USER_NOT_FOUND));
+
+        Pageable pageable = PageRequest.of(page, 5, Sort.by("createdAt").descending());
+
+        return BoardConverter.toBoardListPageDTO(
+                boardRepository.findAllByUser_UserId(userId, pageable)
         );
     }
 }
