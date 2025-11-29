@@ -1,8 +1,8 @@
 package com.example.boardserver.user.service;
 
-import com.example.boardserver.user.dto.UserResponse;
+import com.example.boardserver.user.domain.User;
 
 public interface UserQueryService {
 
-    UserResponse.UserMyPageDTO getDetailUser(Long userId);
+    User getDetailUser(Long userId);
 }

@@ -1,19 +1,20 @@
 package com.example.boardserver.user.converter;
 
 import com.example.boardserver.user.domain.User;
-import com.example.boardserver.user.dto.UserResponse;
+import com.example.boardserver.user.dto.UserMyPageResponseDTO;
+import com.example.boardserver.user.dto.UserResponseDTO;
 
 import java.util.Optional;
 
-public class UserResponseConverter {
+public class UserConverter {
 
     /**
-     * User 엔티티를 UserMyPageDTO로 변환하는 메소드
+     * User 엔티티를 UserMyPageResponseDTO로 변환하는 메소드
      * @param user User
-     * @return UserMyPageDTO
+     * @return UserMyPageResponseDTO
      */
-    public static UserResponse.UserMyPageDTO toUserMyPageDTO(User user) {
-        return UserResponse.UserMyPageDTO.builder()
+    public static UserMyPageResponseDTO toUserMyPageResponseDTO(User user) {
+        return UserMyPageResponseDTO.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
