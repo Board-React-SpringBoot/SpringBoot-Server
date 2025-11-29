@@ -30,8 +30,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     /**
      * UserId로 유저 정보를 조회하는 메소드
-     * @param userId
-     * @return
+     * @param userId Long
+     * @return Optional<User>
      */
     Optional<User> findByUserId(Long userId);
 }

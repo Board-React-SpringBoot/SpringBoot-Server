@@ -78,8 +78,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(PERMIT_URLS).permitAll()
-                        .requestMatchers("/api/v1/board/*/like").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/board/**", "/file/**").permitAll()
+                        .requestMatchers("/api/v1/board/*/like", "/api/v1/user/test").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/board/**", "/file/**", "/api/v1/user/*").permitAll()
                         .requestMatchers("/api/v1/user/**", "/api/v1/board/**", "/file/**").authenticated()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().permitAll())

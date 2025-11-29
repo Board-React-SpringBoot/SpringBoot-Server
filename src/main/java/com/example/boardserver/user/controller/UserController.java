@@ -2,12 +2,15 @@ package com.example.boardserver.user.controller;
 
 import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.common.ApiResponse;
-import com.example.boardserver.user.dto.UserResponse;
+import com.example.boardserver.user.converter.UserConverter;
+import com.example.boardserver.user.dto.UserMyPageResponseDTO;
+import com.example.boardserver.user.dto.UserResponseDTO;
 import com.example.boardserver.user.service.UserQueryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,9 +46,24 @@ public class UserController {
     }
 
     @GetMapping()
-    public ApiResponse<UserResponse.UserMyPageDTO> getDetailUser() {
+    public ApiResponse<UserMyPageResponseDTO> getDetailUser() {
         CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return ApiResponse.onSuccess(userQueryService.getDetailUser(user.userId()));
+        return ApiResponse.onSuccess(
+                UserConverter.toUserMyPageResponseDTO(
+                        userQueryService.getDetailUser(user.getUserId())
+                )
+        );
+    }
+
+    @GetMapping("/{userId}")
+    public ApiResponse<UserResponseDTO> getUser(
+            @PathVariable("userId") Long userId
+    ) {
+        return ApiResponse.onSuccess(
+                UserConverter.toUserResponseDTO(
+                        userQueryService.getDetailUser(userId)
+                )
+        );
     }
 }
