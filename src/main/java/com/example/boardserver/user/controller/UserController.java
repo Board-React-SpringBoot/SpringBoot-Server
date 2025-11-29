@@ -4,15 +4,16 @@ import com.example.boardserver.auth.dto.CustomUserDetails;
 import com.example.boardserver.common.ApiResponse;
 import com.example.boardserver.user.converter.UserConverter;
 import com.example.boardserver.user.dto.UserMyPageResponseDTO;
+import com.example.boardserver.user.dto.UserRequestDTO;
 import com.example.boardserver.user.dto.UserResponseDTO;
+import com.example.boardserver.user.service.UserCommandService;
 import com.example.boardserver.user.service.UserQueryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserQueryService userQueryService;
+    private final UserCommandService userCommandService;
 
     @GetMapping("/test")
     public ApiResponse<Map<String, Object>> test() {
@@ -65,5 +67,21 @@ public class UserController {
                         userQueryService.getDetailUser(userId)
                 )
         );
+    }
+
+    @PatchMapping("/nickname")
+    public ApiResponse<UserMyPageResponseDTO> updateNickname(
+            @RequestBody @Valid UserRequestDTO.UpdateNickname request,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return ApiResponse.onSuccess(userCommandService.updateNickname(user.userId(), request));
+    }
+
+    @PatchMapping("/profile")
+    public ApiResponse<UserMyPageResponseDTO> updateProfile(
+            @RequestBody UserRequestDTO.UpdateProfile request,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return ApiResponse.onSuccess(userCommandService.updateProfile(user.userId(), request));
     }
 }
