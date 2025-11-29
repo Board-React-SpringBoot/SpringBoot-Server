@@ -15,4 +15,9 @@ public record JoinRequestDTO (
         String password,
         String profile
 ) {
+    public JoinRequestDTO {
+        if (profile != null && profile.isBlank()) {
+            profile = null;
+        }
+    }
 }

@@ -69,4 +69,20 @@ public class User extends BaseEntity {
     public void encodedPassword(String encodedPassword) {
         this.password = encodedPassword;
     }
+
+    /**
+     * 닉네임 변경
+     * @param nickname String
+     */
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    /**
+     * 프로필 변경
+     * @param profile String
+     */
+    public void changeProfile(String profile) {
+        this.profile = profile;
+    }
 }
