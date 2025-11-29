@@ -16,4 +16,9 @@ public class KeywordQueryServiceImpl implements KeywordQueryService {
     public KeywordListResponseDTO getPopularKeywords() {
         return KeywordConverter.toKeywordList(keywordRepository.findAllByOrderByCountDesc());
     }
+
+    @Override
+    public KeywordListResponseDTO getRelatedKeywords(String keyword) {
+        return KeywordConverter.toRelatedKeywordList(keywordRepository.getRelatedKeywords(keyword));
+    }
 }
