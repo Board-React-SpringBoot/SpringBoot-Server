@@ -1,5 +1,7 @@
 package com.example.boardserver.board.service.fileService;
 
+import com.example.boardserver.common.code.status.ErrorStatus;
+import com.example.boardserver.exception.handler.FileHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -24,7 +26,7 @@ public class FileCommandServiceImpl implements FileCommandService {
     @Override
     public String upLoadFile(MultipartFile file) {
 
-        if (file.isEmpty()) return null;
+        if (file.isEmpty()) throw new FileHandler(ErrorStatus.FILE_IS_EMPTY);
 
         String originalFileName = file.getOriginalFilename();
         String extension = Objects.requireNonNull(originalFileName).substring(originalFileName.lastIndexOf("."));
@@ -35,8 +37,7 @@ public class FileCommandServiceImpl implements FileCommandService {
         try {
             file.transferTo(new File(savePath));
         } catch (Exception exception) {
-            exception.printStackTrace();
-            return null;
+            throw new FileHandler(ErrorStatus.FILE_UPLOAD_ERROR);
         }
 
         return fileUrl + saveFileName;
@@ -49,11 +50,13 @@ public class FileCommandServiceImpl implements FileCommandService {
 
         try {
             resource = new UrlResource("file:" + filePath + filename);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return null;
-        }
 
-        return resource ;
+            if (!resource.exists() || !resource.isReadable()) {
+                throw new FileHandler(ErrorStatus.FILE_NOT_FOUND);
+            }
+            return resource;
+        } catch (Exception exception) {
+            throw new FileHandler(ErrorStatus.FILE_INCORRECT_URL);
+        }
     }
 }

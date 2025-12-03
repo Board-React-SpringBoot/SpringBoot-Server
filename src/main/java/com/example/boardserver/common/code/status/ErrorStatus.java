@@ -34,6 +34,11 @@ public enum ErrorStatus implements BaseErrorCode {
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD4001", "게시물이 존재하지 않습니다."),
     BOARD_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "BOARD4002", "해당 게시물에 접근할 권한이 없습니다."),
 
+    FILE_IS_EMPTY(HttpStatus.UNAUTHORIZED, "FILE4001", "업로드할 파일이 없습니다."),
+    FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "FILE4002", "파일을 찾을 수 없습니다."),
+    FILE_INCORRECT_URL(HttpStatus.NOT_FOUND, "FILE4003", "파일 경로가 잘못되었습니다."),
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE5001", "파일 저장 중 오류가 발생했습니다."),
+
     // 작성 예시
     TEST_EXCEPTION(HttpStatus.BAD_REQUEST, "TEST4001", "테스트용 에러입니다."),
     ;
