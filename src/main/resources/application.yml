@@ -46,6 +46,12 @@ spring:
             scope:
               - email
               - profile
+          github:
+            client-name: github
+            authorization-grant-type: authorization_code
+            scope:
+              - email
+              - profile
         provider:
           naver:
             authorization-uri: https://nid.naver.com/oauth2.0/authorize

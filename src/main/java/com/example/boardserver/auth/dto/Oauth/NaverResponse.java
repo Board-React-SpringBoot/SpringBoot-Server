@@ -1,7 +1,10 @@
 package com.example.boardserver.auth.dto.Oauth;
 
+import lombok.ToString;
+
 import java.util.Map;
 
+@ToString
 public class NaverResponse implements OAuth2Response{
 
     private final Map<String, Object> attribute;

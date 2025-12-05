@@ -5,27 +5,28 @@ import lombok.ToString;
 import java.util.Map;
 
 @ToString
-public class GoogleResponse implements OAuth2Response{
+public class GitHubResponse implements OAuth2Response{
 
     private final Map<String, Object> attribute;
 
-    public GoogleResponse(Map<String, Object> attribute) {
+    public GitHubResponse(Map<String, Object> attribute) {
         this.attribute = attribute;
     }
 
     @Override
     public String getProvider() {
-        return "google";
+        return "github";
     }
 
     @Override
     public String getProviderId() {
-        return attribute.get("sub").toString();
+        return attribute.get("id").toString();
     }
 
     @Override
     public String getEmail() {
-        return attribute.get("email").toString();
+        Object email = attribute.get("email");
+        return email != null ? email.toString() : null;
     }
 
     @Override
@@ -35,6 +36,6 @@ public class GoogleResponse implements OAuth2Response{
 
     @Override
     public String getProfile() {
-        return attribute.get("picture").toString();
+        return attribute.get("avatar_url").toString();
     }
 }
