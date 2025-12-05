@@ -1,6 +1,7 @@
 package com.example.boardserver.auth.filter;
 
 import com.example.boardserver.common.ApiResponse;
+import com.example.boardserver.common.code.dto.ErrorReasonDTO;
 import com.example.boardserver.common.code.status.ErrorStatus;
 import com.example.boardserver.exception.handler.AuthHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -62,12 +64,31 @@ public class JWTExceptionFilter extends OncePerRequestFilter {
     public static void responseError(HttpServletResponse response, ErrorStatus errorStatus) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(errorStatus.getHttpStatus().value());
+
         ObjectMapper mapper = new ObjectMapper();
-
         ApiResponse<String> failureResponse = ApiResponse.onFailure(errorStatus.getCode(), errorStatus.getMessage(), null);
-        String body = mapper.writeValueAsString(failureResponse);
 
+        String body = mapper.writeValueAsString(failureResponse);
         response.getWriter().write(body);
         // ApiResponse.onFailure(errorStatus.getCode(), errorStatus.getMessage(), null);
+    }
+
+    /**
+     * OAuth2 인증 중 발생한 예외를 클라이언트에게 응답으로 보내는 메소드
+     * @param response HttpServletResponse
+     * @param reason ErrorReasonDTO
+     * @throws IOException IOException
+     */
+    public static void responseError(HttpServletResponse response, ErrorReasonDTO reason) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+
+        HttpStatus httpStatus = reason.httpStatus() != null ? reason.httpStatus() : HttpStatus.BAD_REQUEST;
+        response.setStatus(httpStatus.value());
+
+        ObjectMapper mapper = new ObjectMapper();
+        ApiResponse<String> failureResponse = ApiResponse.onFailure(reason.code(), reason.message(), null);
+
+        String body = mapper.writeValueAsString(failureResponse);
+        response.getWriter().write(body);
     }
 }

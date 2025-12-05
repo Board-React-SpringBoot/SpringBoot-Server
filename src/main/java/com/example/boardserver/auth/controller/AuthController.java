@@ -49,6 +49,11 @@ public class AuthController {
         return "http://localhost:8080/api/v1/auth/oauth2/google";
     }
 
+    @PostMapping("/github")
+    public String github() {
+        return "http://localhost:8080/api/v1/auth/oauth2/github";
+    }
+
     @GetMapping("/reissue")
     public ApiResponse<String> reissue(HttpServletRequest request, HttpServletResponse response) {
         

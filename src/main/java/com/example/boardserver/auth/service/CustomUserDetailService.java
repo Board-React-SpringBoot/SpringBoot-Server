@@ -2,10 +2,12 @@ package com.example.boardserver.auth.service;
 
 import com.example.boardserver.auth.converter.JoinConverter;
 import com.example.boardserver.auth.dto.CustomUserDetails;
+import com.example.boardserver.auth.dto.Oauth.GitHubResponse;
 import com.example.boardserver.auth.dto.Oauth.GoogleResponse;
 import com.example.boardserver.auth.dto.Oauth.NaverResponse;
 import com.example.boardserver.auth.dto.Oauth.OAuth2Response;
 import com.example.boardserver.common.code.status.ErrorStatus;
+import com.example.boardserver.exception.handler.OAuth2Handler;
 import com.example.boardserver.user.domain.User;
 import com.example.boardserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -66,11 +69,14 @@ public class CustomUserDetailService extends DefaultOAuth2UserService implements
 
             case "google" -> oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
 
-            default -> throw new OAuth2AuthenticationException("지원하지 않는 소셜 로그인입니다.: " + registrationId);
+            case "github" -> oAuth2Response = new GitHubResponse(oAuth2User.getAttributes());
+
+            default -> throw new OAuth2Handler(ErrorStatus.OAUTH_NOT_SUPPORTED);
         }
-        System.out.println("email = " + oAuth2Response.getEmail());
-        System.out.println("nickname = " + oAuth2Response.getNickname());
-        System.out.println("profile = " + oAuth2Response.getProfile());
+
+        if (oAuth2Response.getEmail() == null) throw new OAuth2Handler(ErrorStatus.SOCIAL_EMAIL_PRIVATE);
+
+        System.out.println("Social Login User = " + oAuth2Response);
 
         Optional<User> user = userRepository.findByEmail(oAuth2Response.getEmail());
         User savedUser;
