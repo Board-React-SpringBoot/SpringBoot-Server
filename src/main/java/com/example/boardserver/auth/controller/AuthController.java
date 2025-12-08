@@ -54,6 +54,11 @@ public class AuthController {
         return "http://localhost:8080/api/v1/auth/oauth2/github";
     }
 
+    @PostMapping("/kakao")
+    public String kakao() {
+        return "http://localhost:8080/api/v1/auth/oauth2/kakao";
+    }
+
     @GetMapping("/reissue")
     public ApiResponse<String> reissue(HttpServletRequest request, HttpServletResponse response) {
         
