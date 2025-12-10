@@ -51,6 +51,8 @@ public class SecurityConfig {
             "/api/v1/auth/login", "/api/v1/auth/join",
             "/api/v1/auth/oauth2/google", "/api/v1/auth/google",
             "/api/v1/auth/oauth2/naver", "/api/v1/auth/naver",
+            "/api/v1/auth/oauth2/github", "/api/v1/auth/github",
+            "/api/v1/auth/oauth2/kakao", "/api/v1/auth/kakao",
             "/api/v1/auth/reissue"
     };
 

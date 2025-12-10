@@ -24,6 +24,8 @@ public enum ErrorStatus implements BaseErrorCode {
     JWT_SIGNATURE_FAILED(HttpStatus.UNAUTHORIZED, "JWT4015", "JWT 토큰의 서명이 올바르지 않습니다"),
     REFRESH_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT4016", "Refresh 토큰이 존재하지 않습니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "JWT4017", "유효하지 않은 Refresh 토큰입니다."),
+    OAUTH_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "JWT4018", "해당 사이트는 지원하지 않는 로그인입니다."),
+    SOCIAL_EMAIL_PRIVATE(HttpStatus.BAD_REQUEST, "JWT4019", "해당 계정의 이메일에 접근할 수 없습니다."),
 
     // 유저 관련 에러
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "유저가 없습니다."),
