@@ -1,5 +1,6 @@
 package com.example.boardserver.auth.controller;
 
+import com.example.boardserver.auth.controller.enums.SocialEnum;
 import com.example.boardserver.auth.dto.AuthRequestDTO;
 import com.example.boardserver.auth.dto.JoinRequestDTO;
 import com.example.boardserver.auth.dto.JoinResponseDTO;
@@ -39,24 +40,9 @@ public class AuthController {
         return ApiResponse.onSuccess(request);
     }
 
-    @PostMapping("/naver")
-    public String naver() {
-        return "http://localhost:8080/api/v1/auth/oauth2/naver";
-    }
-
-    @PostMapping("/google")
-    public String google() {
-        return "http://localhost:8080/api/v1/auth/oauth2/google";
-    }
-
-    @PostMapping("/github")
-    public String github() {
-        return "http://localhost:8080/api/v1/auth/oauth2/github";
-    }
-
-    @PostMapping("/kakao")
-    public String kakao() {
-        return "http://localhost:8080/api/v1/auth/oauth2/kakao";
+    @GetMapping("/{social}")
+    public String social(@PathVariable SocialEnum social) {
+        return "http://localhost:8080/api/v1/auth/oauth2/" + social.toLowerCase();
     }
 
     @GetMapping("/reissue")
